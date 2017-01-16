@@ -39,9 +39,9 @@
     <link href="https://zhwentao.github.io/2017/01/16/ssh%E9%85%8D%E7%BD%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <id>https://zhwentao.github.io/2017/01/16/ssh配置注意事项/</id>
     <published>2017-01-16T14:28:43.000Z</published>
-    <updated>2017-01-16T14:34:33.000Z</updated>
+    <updated>2017-01-16T14:35:25.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="ssh连接常见问题："><a href="#ssh连接常见问题：" class="headerlink" title="ssh连接常见问题："></a>ssh连接常见问题：</h3><ol>
+    <content type="html"><![CDATA[<h2 id="ssh连接常见问题："><a href="#ssh连接常见问题：" class="headerlink" title="ssh连接常见问题："></a>ssh连接常见问题：</h2><ol>
 <li>秘钥路径配置不对</li>
 <li>服务端authorized_keys权限不对（正确600）<br>调试：<br>客户端：ssh -vvv<br>服务端：sshd -d</li>
 </ol>
@@ -49,7 +49,7 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;ssh连接常见问题：&quot;&gt;&lt;a href=&quot;#ssh连接常见问题：&quot; class=&quot;headerlink&quot; title=&quot;ssh连接常见问题：&quot;&gt;&lt;/a&gt;ssh连接常见问题：&lt;/h3&gt;&lt;ol&gt;
+      &lt;h2 id=&quot;ssh连接常见问题：&quot;&gt;&lt;a href=&quot;#ssh连接常见问题：&quot; class=&quot;headerlink&quot; title=&quot;ssh连接常见问题：&quot;&gt;&lt;/a&gt;ssh连接常见问题：&lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;秘钥路径配置不对&lt;/li&gt;
 &lt;li&gt;服务端authorized_
     
