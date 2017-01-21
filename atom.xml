@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-01-16T14:44:22.000Z</updated>
+  <updated>2017-01-21T14:50:36.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -14,6 +14,85 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>猴年总结</title>
+    <link href="https://zhwentao.github.io/2017/01/21/%E7%8C%B4%E5%B9%B4%E6%80%BB%E7%BB%93/"/>
+    <id>https://zhwentao.github.io/2017/01/21/猴年总结/</id>
+    <published>2017-01-21T14:50:36.000Z</published>
+    <updated>2017-01-21T14:50:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。</p>
+<p>工作上，从老东家毕业，换了新的环境，有更多的时间折腾些自己感兴趣的事，还不错。</p>
+<p>技能上，买的书看了大半吧，温习了java相关的东西，hadoop相关的一些东西。go，swift这些热门的语言也可以上手些程序了。收获还是有的。</p>
+<p>生活嘛，还是老样子，顺心的事多，烦心的事少。</p>
+<p>接下来的事情，就是计划一下来年，</p>
+<p>技能上，还是要保持持续学习的劲头，把go，swift继续深入，争取能够做个好用的app和一套go的服务端业务。大数据方面，希望能够更深入的了解hadoop，storm，spark这些大数据处理方面的技能。kafka，zookeeper这些分布式系统的常用组件也能有个大致的了解。数数还是挺多的。希望自己能够坚持。</p>
+<p>生活上，争取能够保持，放平心态，顺其自然。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。&lt;/p&gt;
+&lt;p&gt;工作上，从老东家毕业，换了新的环境，有更多的时间折腾些自己感兴趣的事，还不错。&lt;/p&gt;
+&lt;p&gt;技能上，买的书看了大半吧，温习了java相关的东西，hadoop相关的一些东西。go，swift这些热门的语
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>随笔</title>
+    <link href="https://zhwentao.github.io/2017/01/17/%E9%9A%8F%E7%AC%94/"/>
+    <id>https://zhwentao.github.io/2017/01/17/随笔/</id>
+    <published>2017-01-17T14:54:10.000Z</published>
+    <updated>2017-01-17T14:54:34.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>category</title>
+    <link href="https://zhwentao.github.io/2017/01/17/category/"/>
+    <id>https://zhwentao.github.io/2017/01/17/category/</id>
+    <published>2017-01-17T14:53:35.000Z</published>
+    <updated>2017-01-17T14:53:35.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>php扩展练手</title>
+    <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%BB%83%E6%89%8B/"/>
+    <id>https://zhwentao.github.io/2017/01/17/php扩展练手/</id>
+    <published>2017-01-17T14:43:28.000Z</published>
+    <updated>2017-01-17T14:47:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>欲善其事，先利其器。</p>
+<p>编写PHP扩展用到的工具：<br>ext_skel</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;欲善其事，先利其器。&lt;/p&gt;
+&lt;p&gt;编写PHP扩展用到的工具：&lt;br&gt;ext_skel&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
+    
+  </entry>
   
   <entry>
     <title>php并发实践</title>
