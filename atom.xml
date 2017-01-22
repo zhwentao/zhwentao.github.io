@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-01-22T15:22:02.000Z</updated>
+  <updated>2017-01-22T15:45:15.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -14,6 +14,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>nginx http 502 503 504区别</title>
+    <link href="https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504%E5%8C%BA%E5%88%AB/"/>
+    <id>https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504区别/</id>
+    <published>2017-01-22T15:43:32.000Z</published>
+    <updated>2017-01-22T15:45:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>做web开发，常常回遇到5XX的状态码，区别记录下来：</p>
+<ul>
+<li>504：Gateway Timeout 网关超时，如php-fpm运行超时</li>
+<li>502：Bad Gateway 网关错误，如无空闲的php-fpm进程</li>
+<li>503：Service  Unavailable 服务不可用，如当前并发请求数达到nginx limit_conn上线</li>
+</ul>
+<p>504表示网关可用，但是处理超时<br>502表示没有可用的网关<br>503表示nginx不可提供服务</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;做web开发，常常回遇到5XX的状态码，区别记录下来：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;504：Gateway Timeout 网关超时，如php-fpm运行超时&lt;/li&gt;
+&lt;li&gt;502：Bad Gateway 网关错误，如无空闲的php-fpm进程&lt;/li&gt;
+&lt;li&gt;503：
+    
+    </summary>
+    
+    
+      <category term="nginx" scheme="https://zhwentao.github.io/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>猴年总结</title>
