@@ -53,7 +53,7 @@ phpize 生成php扩展congifure
 参数类型对应表
 
 类型指定符    对应的C类型         描述   l            long">
-<meta property="og:updated_time" content="2017-02-07T16:08:06.000Z">
+<meta property="og:updated_time" content="2017-02-07T16:20:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php扩展知识点总结">
 <meta name="twitter:description" content="开发PHP扩展基本的知识点总结：
@@ -204,10 +204,15 @@ phpize 生成php扩展congifure
 <p>##获取参数</p>
 <p>参数类型对应表</p>
 <blockquote>
-<p>类型指定符    对应的C类型         描述<br>   l            long           符号整数<br>   d            double         浮点数<br>   s            char <em>, int    二进制字符串，长度<br>   b            zend_bool      逻辑型（1或0）<br>   r            zval </em>         资源（文件指针，数据库连接等）<br>   a            zval <em>         联合数组<br>   o            zval </em>         任何类型的对象<br>   O            zval <em>         指定类型的对象。需要提供目标对象的类类型<br>   z            zval </em>         无任何操作的zval</p>
+<p>类型指定符    对应的C类型         描述<br>   l            long           符号整数<br>   d            double         浮点数<br>   s            char *, int    二进制字符串，长度<br>   b            zend_bool      逻辑型（1或0）<br>   r            zval <em>         资源（文件指针，数据库连接等）<br>   a            zval </em>         联合数组<br>   o            zval <em>         任何类型的对象<br>   O            zval </em>         指定类型的对象。需要提供目标对象的类类型<br>   z            zval *         无任何操作的zval</p>
 </blockquote>
-<p>##内存分配</p>
-<p>##返回值</p>
+<p>##内存分配<br>堆内存分配和标准c类似，只不过e***alloc()<br>函数如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">emalloc(<span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">efree(<span class="keyword">void</span> *ptr);</div><div class="line"> </div><div class="line">ecalloc(<span class="keyword">size_t</span> nmemb, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">erealloc(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">estrdup(<span class="keyword">const</span> <span class="keyword">char</span> *s);</div><div class="line"> </div><div class="line">estrndup(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">unsigned</span> <span class="keyword">int</span> length);</div></pre></td></tr></table></figure>
+<p>##返回值<br>变量：return_value<br>宏：RETURN_type(), RETVAL_type()</p>
+<p>宏函数：</p>
+<blockquote>
+<p>设置返回值并且结束函数    设置返回值        宏返回类型和参数<br>RETURN_LONG(l)            RETVAL_LONG(l)        整数<br>RETURN_BOOL(b)               RETVAL_BOOL(b)        布尔数(1或0)<br>RETURN_NULL()    RETVAL_NULL()    NULL<br>RETURN_DOUBLE(d)        RETVAL_DOUBLE(d)    浮点数<br>RETURN_STRING(s, dup)        RETVAL_STRING(s, dup)    字符串。如果dup为1，引擎会调用estrdup()重复s，使用拷贝。如果dup为0，就使用s<br>RETURN_STRINGL(s, l, dup)    RETVAL_STRINGL(s, l, dup)    长度为l的字符串值。与上一个宏一样，但因为s的长度被指定，所以速度更快。<br>RETURN_TRUE            RETVAL_TRUE        返回布尔值true。注意到这个宏没有括号。<br>RETURN_FALSE            RETVAL_FALSE        返回布尔值false。注意到这个宏没有括号。<br>RETURN_RESOURCE(r)        RETVAL_RESOURCE(r)    资源句柄。</p>
+</blockquote>
 <p>##创建PHP变量结构体</p>
 <p>##引用三方库</p>
 <p>参考：<br><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></p>
