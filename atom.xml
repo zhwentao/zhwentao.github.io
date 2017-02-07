@@ -76,26 +76,30 @@
   </entry>
   
   <entry>
-    <title>php扩展练手</title>
+    <title>php扩展知识点总结</title>
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%BB%83%E6%89%8B/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展练手/</id>
     <published>2017-01-17T14:43:28.000Z</published>
-    <updated>2017-01-17T14:47:11.000Z</updated>
+    <updated>2017-02-07T15:20:23.000Z</updated>
     
-    <content type="html"><![CDATA[<p>欲善其事，先利其器。</p>
-<p>编写PHP扩展用到的工具：<br>ext_skel</p>
+    <content type="html"><![CDATA[<p>开发PHP扩展基本的知识点总结：</p>
+<p>##编写PHP扩展用到的工具：<br>ext_skel 根据proto／xml等描述文件生成扩展代码框架<br><code>ext_skel --proto=file --extname=xyz</code><br>phpize 生成php扩展congifure</p>
+<p>##获取参数</p>
+<p>##内存分配</p>
+<p>##返回值</p>
+<p>##创建PHP变量结构体</p>
+<p>##引用三方库</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;欲善其事，先利其器。&lt;/p&gt;
-&lt;p&gt;编写PHP扩展用到的工具：&lt;br&gt;ext_skel&lt;/p&gt;
-
+      &lt;p&gt;开发PHP扩展基本的知识点总结：&lt;/p&gt;
+&lt;p&gt;##编写PHP扩展用到的工具：&lt;br&gt;ext_skel 根据proto／xml等描述文件生成扩展代码框架&lt;br&gt;&lt;code&gt;ext_skel --proto=file --extname=xyz&lt;/code&gt;&lt;br&gt;phpiz
     
     </summary>
     
     
-      <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
+      <category term="PHP c" scheme="https://zhwentao.github.io/tags/PHP-c/"/>
     
   </entry>
   
