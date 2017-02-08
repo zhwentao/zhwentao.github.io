@@ -37,7 +37,7 @@
 编写PHP扩展用到的工具：ext_skel 根据proto／xml等描述文件生成扩展代码框架
 1#ext_skel --proto=file --extname=xyz
 phpize 生成php扩展congifure
-获取参数参数类型对应表`
+获取参数参数类型对应表
 
 
 
@@ -55,7 +55,10 @@ long
 
    d
 double
-浮点数">
+浮点数
+
+
+   s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="php扩展知识点总结">
 <meta property="og:url" content="https://zhwentao.github.io/2017/01/17/php扩展知识点总结/index.html">
@@ -64,7 +67,7 @@ double
 编写PHP扩展用到的工具：ext_skel 根据proto／xml等描述文件生成扩展代码框架
 1#ext_skel --proto=file --extname=xyz
 phpize 生成php扩展congifure
-获取参数参数类型对应表`
+获取参数参数类型对应表
 
 
 
@@ -82,15 +85,18 @@ long
 
    d
 double
-浮点数">
-<meta property="og:updated_time" content="2017-02-08T14:35:10.000Z">
+浮点数
+
+
+   s">
+<meta property="og:updated_time" content="2017-02-08T14:39:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php扩展知识点总结">
 <meta name="twitter:description" content="开发PHP扩展基本的知识点总结：
 编写PHP扩展用到的工具：ext_skel 根据proto／xml等描述文件生成扩展代码框架
 1#ext_skel --proto=file --extname=xyz
 phpize 生成php扩展congifure
-获取参数参数类型对应表`
+获取参数参数类型对应表
 
 
 
@@ -108,7 +114,10 @@ long
 
    d
 double
-浮点数">
+浮点数
+
+
+   s">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -253,7 +262,7 @@ double
 <h1 id="编写PHP扩展用到的工具："><a href="#编写PHP扩展用到的工具：" class="headerlink" title="编写PHP扩展用到的工具："></a>编写PHP扩展用到的工具：</h1><p>ext_skel 根据proto／xml等描述文件生成扩展代码框架</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#ext_skel --proto=file --extname=xyz</span></div></pre></td></tr></table></figure>
 <p>phpize 生成php扩展congifure</p>
-<h1 id="获取参数"><a href="#获取参数" class="headerlink" title="获取参数"></a>获取参数</h1><p>参数类型对应表<br>`</p>
+<h1 id="获取参数"><a href="#获取参数" class="headerlink" title="获取参数"></a>获取参数</h1><p>参数类型对应表</p>
 <table>
 <thead>
 <tr>
@@ -310,11 +319,66 @@ double
 </tr>
 </tbody>
 </table>
-<p>`</p>
 <h1 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h1><p>堆内存分配和标准c类似，只不过e***alloc()<br>函数如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">emalloc(<span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">efree(<span class="keyword">void</span> *ptr);</div><div class="line"> </div><div class="line">ecalloc(<span class="keyword">size_t</span> nmemb, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">erealloc(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">estrdup(<span class="keyword">const</span> <span class="keyword">char</span> *s);</div><div class="line"> </div><div class="line">estrndup(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">unsigned</span> <span class="keyword">int</span> length);</div></pre></td></tr></table></figure>
 <h1 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h1><p>变量：return_value<br>宏：RETURN_type(), RETVAL_type()</p>
-<p>宏函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">设置返回值并且结束函数	|设置返回值		|宏返回类型和参数</div><div class="line">------------------------|-----------------------|----------------</div><div class="line">RETURN_LONG(l)        	|RETVAL_LONG(l)		|整数</div><div class="line">RETURN_BOOL(b)		|RETVAL_BOOL(b)		|布尔数(1或0)</div><div class="line">RETURN_NULL()	RETVAL_NULL()	|NULL			|</div><div class="line">RETURN_DOUBLE(d)		|RETVAL_DOUBLE(d)	|浮点数</div><div class="line">RETURN_STRING(s, dup)		|RETVAL_STRING(s, dup)	|字符串。如果dup为1，引擎会调用estrdup()重复s，使用拷贝。如果dup为0，就使用s</div><div class="line">RETURN_STRINGL(s, l, dup)	|RETVAL_STRINGL(s, l, dup)|	长度为l的字符串值。与上一个宏一样，但因为s的长度被指定，所以速度更快。</div><div class="line">RETURN_TRUE			|RETVAL_TRUE		|返回布尔值true。注意到这个宏没有括号。</div><div class="line">RETURN_FALSE			|RETVAL_FALSE		|返回布尔值false。注意到这个宏没有括号。</div><div class="line">RETURN_RESOURCE(r)		|RETVAL_RESOURCE(r)	|资源句柄。</div></pre></td></tr></table></figure></p>
+<p>宏函数：</p>
+<table>
+<thead>
+<tr>
+<th>设置返回值并且结束函数</th>
+<th>设置返回值</th>
+<th>宏返回类型和参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RETURN_LONG(l)</td>
+<td>RETVAL_LONG(l)</td>
+<td>整数</td>
+</tr>
+<tr>
+<td>RETURN_BOOL(b)</td>
+<td>RETVAL_BOOL(b)</td>
+<td>布尔数(1或0)</td>
+</tr>
+<tr>
+<td>RETURN_NULL()    RETVAL_NULL()</td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>RETURN_DOUBLE(d)</td>
+<td>RETVAL_DOUBLE(d)</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>RETURN_STRING(s, dup)</td>
+<td>RETVAL_STRING(s, dup)</td>
+<td>字符串。如果dup为1，引擎会调用estrdup()重复s，使用拷贝。如果dup为0，就使用s</td>
+</tr>
+<tr>
+<td>RETURN_STRINGL(s, l, dup)</td>
+<td>RETVAL_STRINGL(s, l, dup)</td>
+<td>长度为l的字符串值。与上一个宏一样，但因为s的长度被指定，所以速度更快。</td>
+</tr>
+<tr>
+<td>RETURN_TRUE</td>
+<td>RETVAL_TRUE</td>
+<td>返回布尔值true。注意到这个宏没有括号。</td>
+</tr>
+<tr>
+<td>RETURN_FALSE</td>
+<td>RETVAL_FALSE</td>
+<td>返回布尔值false。注意到这个宏没有括号。</td>
+</tr>
+<tr>
+<td>RETURN_RESOURCE(r)</td>
+<td>RETVAL_RESOURCE(r)</td>
+<td>资源句柄。</td>
+</tr>
+</tbody>
+</table>
 <h1 id="创建PHP变量结构体"><a href="#创建PHP变量结构体" class="headerlink" title="创建PHP变量结构体"></a>创建PHP变量结构体</h1><h1 id="引用三方库"><a href="#引用三方库" class="headerlink" title="引用三方库"></a>引用三方库</h1><p>参考：</p>
 <ol>
 <li><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></li>
