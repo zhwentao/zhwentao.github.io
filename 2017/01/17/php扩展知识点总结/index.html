@@ -89,7 +89,7 @@ double
 
 
    s">
-<meta property="og:updated_time" content="2017-02-10T18:38:38.000Z">
+<meta property="og:updated_time" content="2017-02-10T18:40:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php扩展知识点总结">
 <meta name="twitter:description" content="开发PHP扩展基本的知识点总结：
@@ -384,7 +384,82 @@ double
 <h1 id="ini配置项"><a href="#ini配置项" class="headerlink" title="ini配置项"></a>ini配置项</h1><p>ini文件格式如：myfile.global_value=40，如果未定义，则可以使用如下方式设置默认值。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">PHP_INI_BEGIN()</div><div class="line"> </div><div class="line">STD_PHP_INI_ENTRY(<span class="string">"myfile.global_value"</span>, <span class="string">"42"</span>, PHP_INI_ALL, OnUpdateInt, global_value, zend_myfile_globals, myfile_globals)</div><div class="line"> </div><div class="line">STD_PHP_INI_ENTRY(<span class="string">"myfile.global_string"</span>, <span class="string">"foobar"</span>, PHP_INI_ALL, OnUpdateString, global_string, zend_myfile_globals, myfile_globals)</div><div class="line"> </div><div class="line">PHP_INI_END()</div></pre></td></tr></table></figure>
 <p>你需要分别去掉PHP_MINIT_FUNCTION(myfile)中的REGISTER_INI_ENTRIES()调用和PHP_MSHUTDOWN_FUNCTION(myfile)中的UNREGISTER_INI_ENTRIES()的注释。<br>可以使用全局变量宏访问ini配置项</p>
-<p>STD_PHP_INI_ENTRY宏的参数说明：<br>参数 |   含义<br>—–|——-<br>name   | INI条目名<br>default_value   | 如果没有在INI文件中指定，条目的默认值。默认值始终是一个字符串。<br>modifiable   | 设定在何种环境下INI条目可以被更改的位域。可以的值是：<br>             |PHP_INI_SYSTEM. 能够在php.ini或http.conf等系统文件更改<br>             | PHP_INI_PERDIR. 能够在 .htaccess中更改<br>             | PHP_INI_USER. 能够被用户脚本更改<br>             | PHP_INI_ALL. 能够在所有地方更改<br>on_modify    |处理INI条目更改的回调函数。你不需自己编写处理程序，使用下面提供的函数。包括：<br>             |OnUpdateInt<br>             |OnUpdateString<br>             |OnUpdateBool<br>             |OnUpdateStringUnempty<br>             |OnUpdateReal<br>property_name   |应当被更新的变量名<br>struct_type   |变量驻留的结构类型。因为通常使用全局变量机制，所以这个类型自动被定义，类似于zend_myfile_globals。<br>struct_ptr    |全局结构名。如果使用全局变量机制，该名为myfile_globals。<br>参考：</p>
+<p>STD_PHP_INI_ENTRY宏的参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>INI条目名</td>
+</tr>
+<tr>
+<td>default_value</td>
+<td>如果没有在INI文件中指定，条目的默认值。默认值始终是一个字符串。</td>
+</tr>
+<tr>
+<td>modifiable</td>
+<td>设定在何种环境下INI条目可以被更改的位域。可以的值是：</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_SYSTEM. 能够在php.ini或http.conf等系统文件更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_PERDIR. 能够在 .htaccess中更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_USER. 能够被用户脚本更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_ALL. 能够在所有地方更改</td>
+</tr>
+<tr>
+<td>on_modify</td>
+<td>处理INI条目更改的回调函数。你不需自己编写处理程序，使用下面提供的函数。包括：</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateInt</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateString</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateBool</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateStringUnempty</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateReal</td>
+</tr>
+<tr>
+<td>property_name</td>
+<td>应当被更新的变量名</td>
+</tr>
+<tr>
+<td>struct_type</td>
+<td>变量驻留的结构类型。因为通常使用全局变量机制，所以这个类型自动被定义，类似于zend_myfile_globals。</td>
+</tr>
+<tr>
+<td>struct_ptr</td>
+<td>全局结构名。如果使用全局变量机制，该名为myfile_globals。</td>
+</tr>
+</tbody>
+</table>
+<p>参考：</p>
 <ol>
 <li><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></li>
 </ol>
