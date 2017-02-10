@@ -16,7 +16,7 @@
 
 
 
-  <meta name="keywords" content="PHP,c," />
+  <meta name="keywords" content="PHP扩展,PHP,c," />
 
 
 
@@ -89,7 +89,7 @@ double
 
 
    s">
-<meta property="og:updated_time" content="2017-02-08T14:39:05.000Z">
+<meta property="og:updated_time" content="2017-02-10T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php扩展知识点总结">
 <meta name="twitter:description" content="开发PHP扩展基本的知识点总结：
@@ -251,7 +251,7 @@ double
       <div class="post-toc" id="post-toc">
         <h2 class="post-toc-title">文章目录</h2>
         <div class="post-toc-content">
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#编写PHP扩展用到的工具："><span class="toc-text">编写PHP扩展用到的工具：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#获取参数"><span class="toc-text">获取参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#内存分配"><span class="toc-text">内存分配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#返回值"><span class="toc-text">返回值</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建PHP变量结构体"><span class="toc-text">创建PHP变量结构体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用三方库"><span class="toc-text">引用三方库</span></a></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#编写PHP扩展用到的工具："><span class="toc-text">编写PHP扩展用到的工具：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#获取参数"><span class="toc-text">获取参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#内存分配"><span class="toc-text">内存分配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#返回值"><span class="toc-text">返回值</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#全局变量"><span class="toc-text">全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ini配置项"><span class="toc-text">ini配置项</span></a></li></ol>
         </div>
       </div>
     
@@ -379,7 +379,9 @@ double
 </tr>
 </tbody>
 </table>
-<h1 id="创建PHP变量结构体"><a href="#创建PHP变量结构体" class="headerlink" title="创建PHP变量结构体"></a>创建PHP变量结构体</h1><h1 id="引用三方库"><a href="#引用三方库" class="headerlink" title="引用三方库"></a>引用三方库</h1><p>参考：</p>
+<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>PHP可以运行在线程安全和非线程安全的模式下，故此PHP提供一种机制保证两种模式下都可以正确的使用’全局变量’，相关的宏如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ZEND_BEGIN_MODULE_GLOBALS(extname)</div><div class="line"> </div><div class="line"><span class="keyword">int</span> global_value;</div><div class="line"><span class="keyword">char</span> *global_string;</div><div class="line"> </div><div class="line">ZEND_END_MODULE_GLOBALS(extname)</div></pre></td></tr></table></figure></p>
+<p>ext_skel生成的框架代码去掉上面代码的注释，可以在begin和end之间添加其他全局变量</p>
+<h1 id="ini配置项"><a href="#ini配置项" class="headerlink" title="ini配置项"></a>ini配置项</h1><p>参考：</p>
 <ol>
 <li><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></li>
 </ol>
@@ -390,6 +392,8 @@ double
     
       <footer class="post-footer">
         <div class="post-tags">
+          
+            <a href="/tags/PHP扩展/">PHP扩展</a>
           
             <a href="/tags/PHP/">PHP</a>
           

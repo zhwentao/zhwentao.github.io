@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-01-22T15:45:15.000Z</updated>
+  <updated>2017-02-10T16:39:19.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -14,6 +14,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于技术答辩分享记录</title>
+    <link href="https://zhwentao.github.io/2017/02/11/%E5%85%B3%E4%BA%8E%E6%8A%80%E6%9C%AF%E7%AD%94%E8%BE%A9%E5%88%86%E4%BA%AB%E8%AE%B0%E5%BD%95/"/>
+    <id>https://zhwentao.github.io/2017/02/11/关于技术答辩分享记录/</id>
+    <published>2017-02-10T16:02:03.000Z</published>
+    <updated>2017-02-10T16:39:19.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>虽然没有报名晋升答辩，当然也没有被通知报名答辩，但是还是记录一下别人家的经验吧。<br>总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。</p>
+<p>技术晋升答辩当然必须是技术驱动，突出技术上的亮点。可以对业务抽象后产出通用组件，优化开发流程提高工作效率的工具或者系统，新技术结合业务特点的消化应用，等等方面。</p>
+<p>工作成果能够量化，给出前后的对比，使用效果的有力证据，而不是模凌两个的叙述。如：性能优化要给出前后性能图标，具体qps的对比；新技术应用要能说明白为啥用，好在哪里。</p>
+<p>平时工作多总结，抽象，记录。</p>
+<p>表达展示方面，充分准备，自如表达，不争不抢，不卑不亢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;虽然没有报名晋升答辩，当然也没有被通知报名答辩，但是还是记录一下别人家的经验吧。&lt;br&gt;总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。&lt;/p&gt;
+&lt;p&gt;技术晋升答辩当然必须是技术驱动，突出技术上的亮点。可以对业务抽象后产出通用组件，优化开发流程提高工作效率的工具
+    
+    </summary>
+    
+    
+      <category term="软实力" scheme="https://zhwentao.github.io/tags/%E8%BD%AF%E5%AE%9E%E5%8A%9B/"/>
+    
+  </entry>
   
   <entry>
     <title>nginx http 502 503 504区别</title>
@@ -80,7 +106,7 @@
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展知识点总结/</id>
     <published>2017-01-17T14:43:28.000Z</published>
-    <updated>2017-02-08T14:39:05.000Z</updated>
+    <updated>2017-02-10T16:00:00.000Z</updated>
     
     <content type="html"><![CDATA[<p>开发PHP扩展基本的知识点总结：</p>
 <h1 id="编写PHP扩展用到的工具："><a href="#编写PHP扩展用到的工具：" class="headerlink" title="编写PHP扩展用到的工具："></a>编写PHP扩展用到的工具：</h1><p>ext_skel 根据proto／xml等描述文件生成扩展代码框架</p>
@@ -203,7 +229,9 @@
 </tr>
 </tbody>
 </table>
-<h1 id="创建PHP变量结构体"><a href="#创建PHP变量结构体" class="headerlink" title="创建PHP变量结构体"></a>创建PHP变量结构体</h1><h1 id="引用三方库"><a href="#引用三方库" class="headerlink" title="引用三方库"></a>引用三方库</h1><p>参考：</p>
+<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>PHP可以运行在线程安全和非线程安全的模式下，故此PHP提供一种机制保证两种模式下都可以正确的使用’全局变量’，相关的宏如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ZEND_BEGIN_MODULE_GLOBALS(extname)</div><div class="line"> </div><div class="line"><span class="keyword">int</span> global_value;</div><div class="line"><span class="keyword">char</span> *global_string;</div><div class="line"> </div><div class="line">ZEND_END_MODULE_GLOBALS(extname)</div></pre></td></tr></table></figure></p>
+<p>ext_skel生成的框架代码去掉上面代码的注释，可以在begin和end之间添加其他全局变量</p>
+<h1 id="ini配置项"><a href="#ini配置项" class="headerlink" title="ini配置项"></a>ini配置项</h1><p>参考：</p>
 <ol>
 <li><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></li>
 </ol>
@@ -216,6 +244,8 @@
     
     </summary>
     
+    
+      <category term="PHP扩展" scheme="https://zhwentao.github.io/tags/PHP%E6%89%A9%E5%B1%95/"/>
     
       <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
     
