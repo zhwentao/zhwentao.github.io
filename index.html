@@ -174,9 +174,9 @@
 
         
           <p>在linux 环境下开发php扩展，需要用到linux下的调试工具，如gdb，strace，valgrind等。另外，一些情况下，在php产生core是，需要调试core文件。下面记录一下常用工具的用途和一些帮助资源。</p>
-<p>#gdb<br>为了gdb可以显示更多调试信息，需要在开启php编译选项–enable-debug</p>
-<p>#strace<br>php执行过程中返回的错误信息，有时候并不能明确指出具体哪里除了问题。这就需要使用strace这样的工具来跟踪具体那个函数执行报错。一般使用strace -p=pid来跟踪具体的某个进程，对于fpm等模式下，设置配置文件只启动一个worker进程，方便跟踪。</p>
-<p>#valgrind<br>是一套调试工具集合，用来检测包括内存泄露，多线程竞争等问题的工具。valgrind –leak-check=yes /path/to/php tests/001.php，使用memcheck来检测php是否存在内存泄露。具体可参考 <a href="https://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/" target="_blank" rel="external">应用 Valgrind 发现 Linux 程序的内存问题</a></p>
+<h1 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h1><p>为了gdb可以显示更多调试信息，需要在开启php编译选项–enable-debug</p>
+<h1 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h1><p>php执行过程中返回的错误信息，有时候并不能明确指出具体哪里除了问题。这就需要使用strace这样的工具来跟踪具体那个函数执行报错。一般使用strace -p=pid来跟踪具体的某个进程，对于fpm等模式下，设置配置文件只启动一个worker进程，方便跟踪。</p>
+<h1 id="valgrind"><a href="#valgrind" class="headerlink" title="valgrind"></a>valgrind</h1><p>是一套调试工具集合，用来检测包括内存泄露，多线程竞争等问题的工具。valgrind –leak-check=yes /path/to/php tests/001.php，使用memcheck来检测php是否存在内存泄露。具体可参考 <a href="https://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/" target="_blank" rel="external">应用 Valgrind 发现 Linux 程序的内存问题</a></p>
 
         
       
