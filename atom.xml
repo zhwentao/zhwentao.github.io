@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>zwt</title>
+  <title>T</title>
   
   <link href="/atom.xml" rel="self"/>
   
@@ -9,14 +9,14 @@
   <id>https://zhwentao.github.io/</id>
   
   <author>
-    <name>zwt</name>
+    <name>T</name>
     
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>php扩展-调试工具</title>
+    <title>Php扩展-调试工具</title>
     <link href="https://zhwentao.github.io/2017/02/27/php%E6%89%A9%E5%B1%95-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/"/>
     <id>https://zhwentao.github.io/2017/02/27/php扩展-调试工具/</id>
     <published>2017-02-26T16:24:21.000Z</published>
@@ -69,7 +69,7 @@
   </entry>
   
   <entry>
-    <title>nginx http 502 503 504区别</title>
+    <title>Nginx Http 502 503 504区别</title>
     <link href="https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504%E5%8C%BA%E5%88%AB/"/>
     <id>https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504区别/</id>
     <published>2017-01-22T15:43:32.000Z</published>
@@ -130,7 +130,7 @@
   </entry>
   
   <entry>
-    <title>php扩展知识点总结</title>
+    <title>Php扩展知识点总结</title>
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展知识点总结/</id>
     <published>2017-01-17T14:43:28.000Z</published>
@@ -351,23 +351,26 @@
     </summary>
     
     
-      <category term="PHP扩展" scheme="https://zhwentao.github.io/tags/PHP%E6%89%A9%E5%B1%95/"/>
-    
       <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
+    
+      <category term="PHP扩展" scheme="https://zhwentao.github.io/tags/PHP%E6%89%A9%E5%B1%95/"/>
     
       <category term="c" scheme="https://zhwentao.github.io/tags/c/"/>
     
   </entry>
   
   <entry>
-    <title>php并发实践</title>
+    <title>Php并发实践</title>
     <link href="https://zhwentao.github.io/2017/01/16/php%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/"/>
     <id>https://zhwentao.github.io/2017/01/16/php并发实践/</id>
     <published>2017-01-16T14:29:49.000Z</published>
-    <updated>2017-01-16T14:44:22.000Z</updated>
+    <updated>2017-03-01T15:26:15.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><p>PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h4 id="curl-multi并发请求http服务"><a href="#curl-multi并发请求http服务" class="headerlink" title="curl_multi并发请求http服务"></a>curl_multi并发请求http服务</h4><h4 id="php多进程"><a href="#php多进程" class="headerlink" title="php多进程"></a>php多进程</h4><h4 id="php协程"><a href="#php协程" class="headerlink" title="php协程"></a>php协程</h4>]]></content>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h4 id="curl-multi并发请求http服务"><a href="#curl-multi并发请求http服务" class="headerlink" title="curl_multi并发请求http服务"></a>curl_multi并发请求http服务</h4><p>代码实例：</p>
+<p>这里需要注意一个libcurl引起的bug</p>
+<h4 id="php多进程-多线程"><a href="#php多进程-多线程" class="headerlink" title="php多进程/多线程"></a>php多进程/多线程</h4><p>Pcntl/Pthread</p>
+<h4 id="php协程"><a href="#php协程" class="headerlink" title="php协程"></a>php协程</h4>]]></content>
     
     <summary type="html">
     
@@ -381,7 +384,7 @@
   </entry>
   
   <entry>
-    <title>ssh配置注意事项</title>
+    <title>Ssh配置注意事项</title>
     <link href="https://zhwentao.github.io/2017/01/16/ssh%E9%85%8D%E7%BD%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <id>https://zhwentao.github.io/2017/01/16/ssh配置注意事项/</id>
     <published>2017-01-16T14:28:43.000Z</published>
