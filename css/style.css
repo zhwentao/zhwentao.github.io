@@ -379,7 +379,7 @@ body {
   color: #34495e;
   background: #fefefe;
   scroll-behavior: smooth;
-  border-top: 3px solid #0047AB; }
+  border-top: 3px solid; }
 
 img {
   max-width: 100%;

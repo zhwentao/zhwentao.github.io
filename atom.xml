@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-02-26T16:34:52.000Z</updated>
+  <updated>2017-03-14T15:18:25.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -16,7 +16,29 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Php扩展-调试工具</title>
+    <title>msgpack-c调试历程--demo要看仔细</title>
+    <link href="https://zhwentao.github.io/2017/03/14/msgpack-c%E8%B0%83%E8%AF%95%E5%8E%86%E7%A8%8B/"/>
+    <id>https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/</id>
+    <published>2017-03-14T15:18:25.000Z</published>
+    <updated>2017-03-14T15:18:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>先贴demo代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;msgpack.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/* msgpack::sbuffer is a simple buffer implementation. */</span></div><div class="line">    msgpack_sbuffer sbuf;</div><div class="line">    msgpack_sbuffer_init(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="comment">/* serialize values into the buffer using msgpack_sbuffer_write callback function. */</span></div><div class="line">    msgpack_packer pk;</div><div class="line">    msgpack_packer_init(&amp;pk, &amp;sbuf, msgpack_sbuffer_write);</div><div class="line"></div><div class="line">    msgpack_pack_array(&amp;pk, <span class="number">3</span>);</div><div class="line">    msgpack_pack_int(&amp;pk, <span class="number">1</span>);</div><div class="line">    msgpack_pack_true(&amp;pk);</div><div class="line">    msgpack_pack_str(&amp;pk, <span class="number">7</span>);</div><div class="line">    msgpack_pack_str_body(&amp;pk, <span class="string">"example"</span>, <span class="number">7</span>);</div><div class="line"></div><div class="line">    <span class="comment">/* deserialize the buffer into msgpack_object instance. */</span></div><div class="line">    <span class="comment">/* deserialized object is valid during the msgpack_zone instance alive. */</span></div><div class="line">    msgpack_zone mempool;</div><div class="line">    msgpack_zone_init(&amp;mempool, <span class="number">2048</span>);</div><div class="line"></div><div class="line">    msgpack_object deserialized;</div><div class="line">    msgpack_unpack(sbuf.data, sbuf.size, <span class="literal">NULL</span>, &amp;mempool, &amp;deserialized);</div><div class="line"></div><div class="line">    <span class="comment">/* print the deserialized object. */</span></div><div class="line">    msgpack_object_print(<span class="built_in">stdout</span>, deserialized);</div><div class="line">    <span class="built_in">puts</span>(<span class="string">""</span>);</div><div class="line"></div><div class="line">    msgpack_zone_destroy(&amp;mempool);</div><div class="line">    msgpack_sbuffer_destroy(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;先贴demo代码：&lt;br&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=
+    
+    </summary>
+    
+    
+      <category term="C" scheme="https://zhwentao.github.io/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>php扩展-调试工具</title>
     <link href="https://zhwentao.github.io/2017/02/27/php%E6%89%A9%E5%B1%95-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/"/>
     <id>https://zhwentao.github.io/2017/02/27/php扩展-调试工具/</id>
     <published>2017-02-26T16:24:21.000Z</published>
@@ -69,7 +91,7 @@
   </entry>
   
   <entry>
-    <title>Nginx Http 502 503 504区别</title>
+    <title>nginx http 502 503 504区别</title>
     <link href="https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504%E5%8C%BA%E5%88%AB/"/>
     <id>https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504区别/</id>
     <published>2017-01-22T15:43:32.000Z</published>
@@ -130,7 +152,7 @@
   </entry>
   
   <entry>
-    <title>Php扩展知识点总结</title>
+    <title>php扩展知识点总结</title>
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展知识点总结/</id>
     <published>2017-01-17T14:43:28.000Z</published>
@@ -351,16 +373,16 @@
     </summary>
     
     
-      <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
-    
       <category term="PHP扩展" scheme="https://zhwentao.github.io/tags/PHP%E6%89%A9%E5%B1%95/"/>
     
       <category term="c" scheme="https://zhwentao.github.io/tags/c/"/>
     
+      <category term="PHP" scheme="https://zhwentao.github.io/tags/PHP/"/>
+    
   </entry>
   
   <entry>
-    <title>Php并发实践</title>
+    <title>php并发实践</title>
     <link href="https://zhwentao.github.io/2017/01/16/php%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/"/>
     <id>https://zhwentao.github.io/2017/01/16/php并发实践/</id>
     <published>2017-01-16T14:29:49.000Z</published>
@@ -387,7 +409,7 @@
   </entry>
   
   <entry>
-    <title>Ssh配置注意事项</title>
+    <title>ssh配置注意事项</title>
     <link href="https://zhwentao.github.io/2017/01/16/ssh%E9%85%8D%E7%BD%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <id>https://zhwentao.github.io/2017/01/16/ssh配置注意事项/</id>
     <published>2017-01-16T14:28:43.000Z</published>

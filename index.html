@@ -153,7 +153,41 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/02/27/php扩展-调试工具/">Php扩展-调试工具</a>
+          <a class="post-link" href="/2017/03/14/msgpack-c调试历程/">msgpack-c调试历程--demo要看仔细</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017年3月14日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <p>先贴demo代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;msgpack.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/* msgpack::sbuffer is a simple buffer implementation. */</span></div><div class="line">    msgpack_sbuffer sbuf;</div><div class="line">    msgpack_sbuffer_init(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="comment">/* serialize values into the buffer using msgpack_sbuffer_write callback function. */</span></div><div class="line">    msgpack_packer pk;</div><div class="line">    msgpack_packer_init(&amp;pk, &amp;sbuf, msgpack_sbuffer_write);</div><div class="line"></div><div class="line">    msgpack_pack_array(&amp;pk, <span class="number">3</span>);</div><div class="line">    msgpack_pack_int(&amp;pk, <span class="number">1</span>);</div><div class="line">    msgpack_pack_true(&amp;pk);</div><div class="line">    msgpack_pack_str(&amp;pk, <span class="number">7</span>);</div><div class="line">    msgpack_pack_str_body(&amp;pk, <span class="string">"example"</span>, <span class="number">7</span>);</div><div class="line"></div><div class="line">    <span class="comment">/* deserialize the buffer into msgpack_object instance. */</span></div><div class="line">    <span class="comment">/* deserialized object is valid during the msgpack_zone instance alive. */</span></div><div class="line">    msgpack_zone mempool;</div><div class="line">    msgpack_zone_init(&amp;mempool, <span class="number">2048</span>);</div><div class="line"></div><div class="line">    msgpack_object deserialized;</div><div class="line">    msgpack_unpack(sbuf.data, sbuf.size, <span class="literal">NULL</span>, &amp;mempool, &amp;deserialized);</div><div class="line"></div><div class="line">    <span class="comment">/* print the deserialized object. */</span></div><div class="line">    msgpack_object_print(<span class="built_in">stdout</span>, deserialized);</div><div class="line">    <span class="built_in">puts</span>(<span class="string">""</span>);</div><div class="line"></div><div class="line">    msgpack_zone_destroy(&amp;mempool);</div><div class="line">    msgpack_sbuffer_destroy(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。</p>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2017/02/27/php扩展-调试工具/">php扩展-调试工具</a>
         
       </h1>
 
@@ -226,7 +260,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/22/nginx-http-502-503-504区别/">Nginx Http 502 503 504区别</a>
+          <a class="post-link" href="/2017/01/22/nginx-http-502-503-504区别/">nginx http 502 503 504区别</a>
         
       </h1>
 
@@ -307,7 +341,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/17/php扩展知识点总结/">Php扩展知识点总结</a>
+          <a class="post-link" href="/2017/01/17/php扩展知识点总结/">php扩展知识点总结</a>
         
       </h1>
 
@@ -544,7 +578,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/16/php并发实践/">Php并发实践</a>
+          <a class="post-link" href="/2017/01/16/php并发实践/">php并发实践</a>
         
       </h1>
 
@@ -583,7 +617,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/16/ssh配置注意事项/">Ssh配置注意事项</a>
+          <a class="post-link" href="/2017/01/16/ssh配置注意事项/">ssh配置注意事项</a>
         
       </h1>
 

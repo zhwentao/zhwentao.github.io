@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="msgpack-c调试历程--demo要看仔细"/>
+
+
+
+
+  <meta name="keywords" content="C," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="T">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.x" />
+
+
+
+<link rel="canonical" href="https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/"/>
+
+
+<meta name="description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="msgpack-c调试历程--demo要看仔细">
+<meta property="og:url" content="https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/index.html">
+<meta property="og:site_name" content="T">
+<meta property="og:description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
+<meta property="og:updated_time" content="2017-03-14T15:18:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="msgpack-c调试历程--demo要看仔细">
+<meta name="twitter:description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-26381720-1', 'auto');
+        ga('send', 'pageview');
+  </script>
+
+
+
+    <title> msgpack-c调试历程--demo要看仔细 · T </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">T</a>
+</div>
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">T</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      <a class="mobile-menu-item" href="/">
+        
+        
+          Home
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/archives/">
+        
+        
+          Archives
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/tags">
+        
+        
+          Tags
+        
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          msgpack-c调试历程--demo要看仔细
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017年3月14日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        <p>先贴demo代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;msgpack.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/* msgpack::sbuffer is a simple buffer implementation. */</span></div><div class="line">    msgpack_sbuffer sbuf;</div><div class="line">    msgpack_sbuffer_init(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="comment">/* serialize values into the buffer using msgpack_sbuffer_write callback function. */</span></div><div class="line">    msgpack_packer pk;</div><div class="line">    msgpack_packer_init(&amp;pk, &amp;sbuf, msgpack_sbuffer_write);</div><div class="line"></div><div class="line">    msgpack_pack_array(&amp;pk, <span class="number">3</span>);</div><div class="line">    msgpack_pack_int(&amp;pk, <span class="number">1</span>);</div><div class="line">    msgpack_pack_true(&amp;pk);</div><div class="line">    msgpack_pack_str(&amp;pk, <span class="number">7</span>);</div><div class="line">    msgpack_pack_str_body(&amp;pk, <span class="string">"example"</span>, <span class="number">7</span>);</div><div class="line"></div><div class="line">    <span class="comment">/* deserialize the buffer into msgpack_object instance. */</span></div><div class="line">    <span class="comment">/* deserialized object is valid during the msgpack_zone instance alive. */</span></div><div class="line">    msgpack_zone mempool;</div><div class="line">    msgpack_zone_init(&amp;mempool, <span class="number">2048</span>);</div><div class="line"></div><div class="line">    msgpack_object deserialized;</div><div class="line">    msgpack_unpack(sbuf.data, sbuf.size, <span class="literal">NULL</span>, &amp;mempool, &amp;deserialized);</div><div class="line"></div><div class="line">    <span class="comment">/* print the deserialized object. */</span></div><div class="line">    msgpack_object_print(<span class="built_in">stdout</span>, deserialized);</div><div class="line">    <span class="built_in">puts</span>(<span class="string">""</span>);</div><div class="line"></div><div class="line">    msgpack_zone_destroy(&amp;mempool);</div><div class="line">    msgpack_sbuffer_destroy(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/C/">C</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/02/27/php扩展-调试工具/">
+        <span class="next-text nav-default">php扩展-调试工具</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaowt@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/zhwentao" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">T</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.x"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.x"></script>
+
+  </body>
+</html>
