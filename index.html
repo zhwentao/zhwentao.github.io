@@ -169,15 +169,33 @@
     <div class="post-content">
       
         
-          
-        
 
         
           <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
 <h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/03/18/模式匹配算法学习/" class="read-more-link">阅读更多</a>
-          </div>
+<p>时间复杂度：O(mn)。</p>
+<h1 id="kmp类匹配"><a href="#kmp类匹配" class="headerlink" title="kmp类匹配"></a>kmp类匹配</h1><p>kmp匹配相对与朴素匹配，对模式串进行预处理，当匹配失败时，模式串不从头开始，而是根据预处理的求出的next数组进行位移，其中next数组的求解，利用模式串的前缀后缀公共元素最大值方法计算。<br>核心代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (s[i] == p[j] || j == <span class="number">-1</span>) &#123;</div><div class="line">        i++;</div><div class="line">        j++;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        j = next[j];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>next数组记录当匹配失败时，模式串的位移。<br>计算方法速记：求出模式串每个元素的前缀后缀最大长度，然后整体向右移动一位。<br>next数组求解代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> p[M];</div><div class="line"><span class="keyword">int</span> j = <span class="number">0</span>;</div><div class="line"><span class="keyword">int</span> k = <span class="number">-1</span>;</div><div class="line"><span class="keyword">int</span> next[M];</div><div class="line"><span class="keyword">while</span> (j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (k == <span class="number">-1</span> || p[k] == p[j]) &#123;</div><div class="line">        k++;</div><div class="line">        j++;</div><div class="line">        next[j] = k;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        k = next[k];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>时间复杂度为求next数组+匹配模式串，O(m + n)。</p>
+<h1 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h1><p>kmp算法以及其变体算法，一次只能匹配一个模式，要匹配多个模式，就需要循环多次。DFA匹配算法可以同时进行多个模式匹配，在需要多模式匹配的场景下，能够提高匹配性能。经典的多模式匹配算法是Aho-Corasick算法。原理上是把trie树增加失败调转，转变为DFA状态机，然后匹配的时候在dfa内查询，判断是否到达匹配状态。<br>构建步骤：</p>
+<ol>
+<li>根据多模式构建前缀树；</li>
+<li>为前缀树增加跳转，扩展为DFA;<blockquote>
+<p>Go to :<br>We build Trie. And for all characters which don’t have an edge at root, we add an edge back to root.<br>Failure :<br>For a state s, we find the longest proper suffix which is a proper prefix of some pattern. This is done using Breadth First Traversal of Trie.</p>
+</blockquote>
+</li>
+<li>匹配输出.<blockquote>
+<p>Output :<br>For a state s, indexes of all words ending at s are stored. These indexes are stored as bitwise map (by doing bitwise OR of values). This is also computing using Breadth First Traversal with Failure.</p>
+</blockquote>
+</li>
+</ol>
+<p>参考：</p>
+<ol>
+<li><a href="http://blog.csdn.net/v_july_v/article/details/7041827" target="_blank" rel="external">从头到尾彻底理解KMP</a></li>
+<li><a href="http://www.geeksforgeeks.org/aho-corasick-algorithm-pattern-searching/" target="_blank" rel="external">Aho-Corasick Algorithm for Pattern Searching
+</a></li>
+</ol>
+
         
       
     </div>
@@ -209,11 +227,9 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/03/14/msgpack-c调试历程/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>先贴demo代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;msgpack.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/* msgpack::sbuffer is a simple buffer implementation. */</span></div><div class="line">    msgpack_sbuffer sbuf;</div><div class="line">    msgpack_sbuffer_init(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="comment">/* serialize values into the buffer using msgpack_sbuffer_write callback function. */</span></div><div class="line">    msgpack_packer pk;</div><div class="line">    msgpack_packer_init(&amp;pk, &amp;sbuf, msgpack_sbuffer_write);</div><div class="line"></div><div class="line">    msgpack_pack_array(&amp;pk, <span class="number">3</span>);</div><div class="line">    msgpack_pack_int(&amp;pk, <span class="number">1</span>);</div><div class="line">    msgpack_pack_true(&amp;pk);</div><div class="line">    msgpack_pack_str(&amp;pk, <span class="number">7</span>);</div><div class="line">    msgpack_pack_str_body(&amp;pk, <span class="string">"example"</span>, <span class="number">7</span>);</div><div class="line"></div><div class="line">    <span class="comment">/* deserialize the buffer into msgpack_object instance. */</span></div><div class="line">    <span class="comment">/* deserialized object is valid during the msgpack_zone instance alive. */</span></div><div class="line">    msgpack_zone mempool;</div><div class="line">    msgpack_zone_init(&amp;mempool, <span class="number">2048</span>);</div><div class="line"></div><div class="line">    msgpack_object deserialized;</div><div class="line">    msgpack_unpack(sbuf.data, sbuf.size, <span class="literal">NULL</span>, &amp;mempool, &amp;deserialized);</div><div class="line"></div><div class="line">    <span class="comment">/* print the deserialized object. */</span></div><div class="line">    msgpack_object_print(<span class="built_in">stdout</span>, deserialized);</div><div class="line">    <span class="built_in">puts</span>(<span class="string">""</span>);</div><div class="line"></div><div class="line">    msgpack_zone_destroy(&amp;mempool);</div><div class="line">    msgpack_sbuffer_destroy(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。</p>
+
         
       
     </div>
@@ -245,11 +261,11 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/02/27/php扩展-调试工具/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>在linux 环境下开发php扩展，需要用到linux下的调试工具，如gdb，strace，valgrind等。另外，一些情况下，在php产生core是，需要调试core文件。下面记录一下常用工具的用途和一些帮助资源。</p>
+<h1 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h1><p>为了gdb可以显示更多调试信息，需要在开启php编译选项–enable-debug。具体的调试技巧可参考<a href="http://blog.jobbole.com/107759/" target="_blank" rel="external">gdb调试入门-中文</a> <a href="http://www.brendangregg.com/blog/2016-08-09/gdb-example-ncurses.html" target="_blank" rel="external">英文</a></p>
+<h1 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h1><p>php执行过程中返回的错误信息，有时候并不能明确指出具体哪里除了问题。这就需要使用strace这样的工具来跟踪具体那个函数执行报错。一般使用strace -p=pid来跟踪具体的某个进程，对于fpm等模式下，设置配置文件只启动一个worker进程，方便跟踪。</p>
+<h1 id="valgrind"><a href="#valgrind" class="headerlink" title="valgrind"></a>valgrind</h1><p>是一套调试工具集合，用来检测包括内存泄露，多线程竞争等问题的工具。valgrind –leak-check=yes /path/to/php tests/001.php，使用memcheck来检测php是否存在内存泄露。具体可参考 <a href="https://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/" target="_blank" rel="external">应用 Valgrind 发现 Linux 程序的内存问题</a></p>
+
         
       
     </div>
@@ -281,11 +297,12 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/02/11/关于技术答辩分享记录/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>虽然没有报名晋升答辩，当然也没有被通知报名答辩，但是还是记录一下别人家的经验吧。<br>总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。</p>
+<p>技术晋升答辩当然必须是技术驱动，突出技术上的亮点。可以对业务抽象后产出通用组件，优化开发流程提高工作效率的工具或者系统，新技术结合业务特点的消化应用，等等方面。</p>
+<p>工作成果能够量化，给出前后的对比，使用效果的有力证据，而不是模凌两个的叙述。如：性能优化要给出前后性能图标，具体qps的对比；新技术应用要能说明白为啥用，好在哪里。</p>
+<p>平时工作多总结，抽象，记录。</p>
+<p>表达展示方面，充分准备，自如表达，不争不抢，不卑不亢。</p>
+
         
       
     </div>
@@ -317,11 +334,15 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/01/22/nginx-http-502-503-504区别/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>做web开发，常常回遇到5XX的状态码，区别记录下来：</p>
+<ul>
+<li>504：Gateway Timeout 网关超时，如php-fpm运行超时</li>
+<li>502：Bad Gateway 网关错误，如无空闲的php-fpm进程</li>
+<li>503：Service  Unavailable 服务不可用，如当前并发请求数达到nginx limit_conn上线</li>
+</ul>
+<p>504表示网关可用，但是处理超时<br>502表示没有可用的网关<br>503表示nginx不可提供服务</p>
+<p>那么，在错误排查的时候，可以根据日志里状态码来诊断那个环节出现了问题。</p>
+
         
       
     </div>
@@ -353,11 +374,16 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/01/21/猴年总结/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。</p>
+<p>工作上，从老东家毕业，换了新的环境，有更多的时间折腾些自己感兴趣的事，还不错。</p>
+<p>技能上，买的书看了大半吧，温习了java相关的东西，hadoop相关的一些东西。go，swift这些热门的语言也可以上手些程序了。收获还是有的。</p>
+<p>生活嘛，还是老样子，顺心的事多，烦心的事少。</p>
+<p>接下来的事情，就是计划一下来年，</p>
+<p>技能上，还是要保持持续学习的劲头，把go，swift继续深入，争取能够做个好用的app和一套go的服务端业务。大数据方面，希望能够更深入的了解hadoop，storm，spark这些大数据处理方面的技能。kafka，zookeeper这些分布式系统的常用组件也能有个大致的了解。数数还是挺多的。希望自己能够坚持。</p>
+<p>生活上，争取能够保持，放平心态，顺其自然。</p>
+<hr>
+<p>从今年开始要注意做记录总结。</p>
+
         
       
     </div>
@@ -386,8 +412,6 @@
 
     <div class="post-content">
       
-        
-          
         
 
         
@@ -452,9 +476,151 @@
 </tr>
 </tbody>
 </table>
-          <div class="read-more">
-            <a href="/2017/01/17/php扩展知识点总结/" class="read-more-link">阅读更多</a>
-          </div>
+<h1 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h1><p>堆内存分配和标准c类似，只不过e***alloc()<br>函数如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">emalloc(<span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">efree(<span class="keyword">void</span> *ptr);</div><div class="line"> </div><div class="line">ecalloc(<span class="keyword">size_t</span> nmemb, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">erealloc(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">estrdup(<span class="keyword">const</span> <span class="keyword">char</span> *s);</div><div class="line"> </div><div class="line">estrndup(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">unsigned</span> <span class="keyword">int</span> length);</div></pre></td></tr></table></figure>
+<h1 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h1><p>变量：return_value<br>宏：RETURN_type(), RETVAL_type()</p>
+<p>宏函数：</p>
+<table>
+<thead>
+<tr>
+<th>设置返回值并且结束函数</th>
+<th>设置返回值</th>
+<th>宏返回类型和参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RETURN_LONG(l)</td>
+<td>RETVAL_LONG(l)</td>
+<td>整数</td>
+</tr>
+<tr>
+<td>RETURN_BOOL(b)</td>
+<td>RETVAL_BOOL(b)</td>
+<td>布尔数(1或0)</td>
+</tr>
+<tr>
+<td>RETURN_NULL()    RETVAL_NULL()</td>
+<td>NULL</td>
+<td></td>
+</tr>
+<tr>
+<td>RETURN_DOUBLE(d)</td>
+<td>RETVAL_DOUBLE(d)</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>RETURN_STRING(s, dup)</td>
+<td>RETVAL_STRING(s, dup)</td>
+<td>字符串。如果dup为1，引擎会调用estrdup()重复s，使用拷贝。如果dup为0，就使用s</td>
+</tr>
+<tr>
+<td>RETURN_STRINGL(s, l, dup)</td>
+<td>RETVAL_STRINGL(s, l, dup)</td>
+<td>长度为l的字符串值。与上一个宏一样，但因为s的长度被指定，所以速度更快。</td>
+</tr>
+<tr>
+<td>RETURN_TRUE</td>
+<td>RETVAL_TRUE</td>
+<td>返回布尔值true。注意到这个宏没有括号。</td>
+</tr>
+<tr>
+<td>RETURN_FALSE</td>
+<td>RETVAL_FALSE</td>
+<td>返回布尔值false。注意到这个宏没有括号。</td>
+</tr>
+<tr>
+<td>RETURN_RESOURCE(r)</td>
+<td>RETVAL_RESOURCE(r)</td>
+<td>资源句柄。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><p>PHP可以运行在线程安全和非线程安全的模式下，故此PHP提供一种机制保证两种模式下都可以正确的使用’全局变量’，相关的宏如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ZEND_BEGIN_MODULE_GLOBALS(extname)</div><div class="line"> </div><div class="line"><span class="keyword">int</span> global_value;</div><div class="line"><span class="keyword">char</span> *global_string;</div><div class="line"> </div><div class="line">ZEND_END_MODULE_GLOBALS(extname)</div></pre></td></tr></table></figure></p>
+<p>ext_skel生成的框架代码去掉上面代码的注释，可以在begin和end之间添加其他全局变量<br>使用全局变量前要先初始化。</p>
+<h1 id="ini配置项"><a href="#ini配置项" class="headerlink" title="ini配置项"></a>ini配置项</h1><p>ini文件格式如：extname.global_value=40，如果未定义，则可以使用如下方式设置默认值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">PHP_INI_BEGIN()</div><div class="line"> </div><div class="line">STD_PHP_INI_ENTRY(<span class="string">"extname.global_value"</span>, <span class="string">"42"</span>, PHP_INI_ALL, OnUpdateInt, global_value, zend_extname_globals, extname_globals)</div><div class="line"> </div><div class="line">STD_PHP_INI_ENTRY(<span class="string">"extname.global_string"</span>, <span class="string">"foobar"</span>, PHP_INI_ALL, OnUpdateString, global_string, zend_extname_globals, extname_globals)</div><div class="line"> </div><div class="line">PHP_INI_END()</div></pre></td></tr></table></figure>
+<p>你需要分别去掉PHP_MINIT_FUNCTION(extname)中的REGISTER_INI_ENTRIES()调用和PHP_MSHUTDOWN_FUNCTION(extname)中的UNREGISTER_INI_ENTRIES()的注释。<br>可以使用全局变量宏访问ini配置项</p>
+<p>STD_PHP_INI_ENTRY宏的参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>INI条目名</td>
+</tr>
+<tr>
+<td>default_value</td>
+<td>如果没有在INI文件中指定，条目的默认值。默认值始终是一个字符串。</td>
+</tr>
+<tr>
+<td>modifiable</td>
+<td>设定在何种环境下INI条目可以被更改的位域。可以的值是：</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_SYSTEM. 能够在php.ini或http.conf等系统文件更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_PERDIR. 能够在 .htaccess中更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_USER. 能够被用户脚本更改</td>
+</tr>
+<tr>
+<td></td>
+<td>PHP_INI_ALL. 能够在所有地方更改</td>
+</tr>
+<tr>
+<td>on_modify</td>
+<td>处理INI条目更改的回调函数。你不需自己编写处理程序，使用下面提供的函数。包括：</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateInt</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateString</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateBool</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateStringUnempty</td>
+</tr>
+<tr>
+<td></td>
+<td>OnUpdateReal</td>
+</tr>
+<tr>
+<td>property_name</td>
+<td>应当被更新的变量名</td>
+</tr>
+<tr>
+<td>struct_type</td>
+<td>变量驻留的结构类型。因为通常使用全局变量机制，所以这个类型自动被定义，类似于zend_extname_globals。</td>
+</tr>
+<tr>
+<td>struct_ptr</td>
+<td>全局结构名。如果使用全局变量机制，该名为extname_globals。</td>
+</tr>
+</tbody>
+</table>
+<p>参考：</p>
+<ol>
+<li><a href="http://www.laruence.com/2009/04/28/719.html" target="_blank" rel="external">用C/C++扩展你的PHP </a></li>
+</ol>
+
         
       
     </div>
@@ -486,11 +652,14 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/01/16/php并发实践/" class="read-more-link">阅读更多</a>
-          </div>
+          <h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><p>PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h4 id="curl-multi并发请求http服务"><a href="#curl-multi并发请求http服务" class="headerlink" title="curl_multi并发请求http服务"></a>curl_multi并发请求http服务</h4><p>代码实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">$ch1 = curl_init();</div><div class="line">$ch2 = curl_init();</div><div class="line"></div><div class="line">// 设置URL和相应的选项</div><div class="line">curl_setopt($ch1, CURLOPT_URL, &quot;http://lxr.php.net/&quot;);</div><div class="line">curl_setopt($ch1, CURLOPT_HEADER, 0);</div><div class="line">curl_setopt($ch2, CURLOPT_URL, &quot;http://www.php.net/&quot;);</div><div class="line">curl_setopt($ch2, CURLOPT_HEADER, 0);</div><div class="line"></div><div class="line">// 创建批处理cURL句柄</div><div class="line">$mh = curl_multi_init();</div><div class="line"></div><div class="line">// 增加2个句柄</div><div class="line">curl_multi_add_handle($mh,$ch1);</div><div class="line">curl_multi_add_handle($mh,$ch2);</div><div class="line"></div><div class="line">$active = null;</div><div class="line">// 执行批处理句柄</div><div class="line">do &#123;</div><div class="line">    $mrc = curl_multi_exec($mh, $active);</div><div class="line">&#125; while ($mrc == CURLM_CALL_MULTI_PERFORM);</div><div class="line"></div><div class="line">while ($active &amp;&amp; $mrc == CURLM_OK) &#123;</div><div class="line">    //处理select返回-1时cpu 100% 的bug</div><div class="line">    //https://curl.haxx.se/libcurl/c/curl_multi_fdset.html</div><div class="line">    //https://bugs.php.net/bug.php?id=63411</div><div class="line">    $cm = curl_multi_select($mh);</div><div class="line">    if ($cm === -1) &#123;</div><div class="line">        usleep(10000);//10ms</div><div class="line">    &#125; </div><div class="line">    do &#123;</div><div class="line">        $mrc = curl_multi_exec($mh, $active);</div><div class="line">    &#125; while ($mrc == CURLM_CALL_MULTI_PERFORM);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 关闭全部句柄</div><div class="line">curl_multi_remove_handle($mh, $ch1);</div><div class="line">curl_multi_remove_handle($mh, $ch2);</div><div class="line">curl_multi_close($mh);</div></pre></td></tr></table></figure></p>
+<p>这里需要注意一个libcurl引起的bug, 导致select会一直返回-1。</p>
+<blockquote>
+<p>When libcurl returns -1 in max_fd, it is because libcurl currently does something that isn’t possible for your application to monitor with a socket and unfortunately you can then not know exactly when the current action is completed using select(). You then need to wait a while before you proceed and call curl_multi_perform anyway. </p>
+</blockquote>
+<h4 id="php多进程-多线程"><a href="#php多进程-多线程" class="headerlink" title="php多进程/多线程"></a>php多进程/多线程</h4><p>Pcntl/Pthread</p>
+<h4 id="php协程"><a href="#php协程" class="headerlink" title="php协程"></a>php协程</h4>
         
       
     </div>
@@ -522,11 +691,11 @@
         
 
         
-          <p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
-<h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-          <div class="read-more">
-            <a href="/2017/01/16/ssh配置注意事项/" class="read-more-link">阅读更多</a>
-          </div>
+          <h4 id="ssh连接常见问题："><a href="#ssh连接常见问题：" class="headerlink" title="ssh连接常见问题："></a>ssh连接常见问题：</h4><ul>
+<li>秘钥路径配置不对</li>
+<li>服务端authorized_keys权限不对（正确600）<br>调试：<br>客户端：ssh -vvv<br>服务端：sshd -d</li>
+</ul>
+
         
       
     </div>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-03-18T14:34:05.000Z</updated>
+  <updated>2017-03-18T14:37:06.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -20,11 +20,10 @@
     <link href="https://zhwentao.github.io/2017/03/18/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
     <id>https://zhwentao.github.io/2017/03/18/模式匹配算法学习/</id>
     <published>2017-03-18T14:12:41.000Z</published>
-    <updated>2017-03-18T14:34:05.000Z</updated>
+    <updated>2017-03-18T14:37:06.000Z</updated>
     
     <content type="html"><![CDATA[<p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
 <h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
-<a id="more"></a>
 <p>时间复杂度：O(mn)。</p>
 <h1 id="kmp类匹配"><a href="#kmp类匹配" class="headerlink" title="kmp类匹配"></a>kmp类匹配</h1><p>kmp匹配相对与朴素匹配，对模式串进行预处理，当匹配失败时，模式串不从头开始，而是根据预处理的求出的next数组进行位移，其中next数组的求解，利用模式串的前缀后缀公共元素最大值方法计算。<br>核心代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (s[i] == p[j] || j == <span class="number">-1</span>) &#123;</div><div class="line">        i++;</div><div class="line">        j++;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        j = next[j];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
 <p>next数组记录当匹配失败时，模式串的位移。<br>计算方法速记：求出模式串每个元素的前缀后缀最大长度，然后整体向右移动一位。<br>next数组求解代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> p[M];</div><div class="line"><span class="keyword">int</span> j = <span class="number">0</span>;</div><div class="line"><span class="keyword">int</span> k = <span class="number">-1</span>;</div><div class="line"><span class="keyword">int</span> next[M];</div><div class="line"><span class="keyword">while</span> (j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (k == <span class="number">-1</span> || p[k] == p[j]) &#123;</div><div class="line">        k++;</div><div class="line">        j++;</div><div class="line">        next[j] = k;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        k = next[k];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -52,7 +51,7 @@
     <summary type="html">
     
       &lt;p&gt;项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。&lt;/p&gt;
-&lt;h1 id=&quot;朴素匹配&quot;&gt;&lt;a href=&quot;#朴素匹配&quot; class=&quot;headerlink&quot; title=&quot;朴素匹配&quot;&gt;&lt;/a&gt;朴素匹配&lt;/h1&gt;&lt;p&gt;朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &amp;lt; 模式长度。&lt;br&gt;核心代码如下：&lt;br&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt; s[N], p[M];&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; i = j = &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (N - i &amp;gt;= M &amp;amp;&amp;amp; j &amp;lt; M) &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (p[j] == s[j+i]) &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        j++;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    i++;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    j = &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//匹配&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (j == M) &amp;#123;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h1 id=&quot;朴素匹配&quot;&gt;&lt;a href=&quot;#朴素匹配&quot; class=&quot;header
     
     </summary>
     
@@ -204,7 +203,7 @@
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展知识点总结/</id>
     <published>2017-01-17T14:43:28.000Z</published>
-    <updated>2017-03-18T14:32:47.000Z</updated>
+    <updated>2017-03-18T14:37:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>开发PHP扩展基本的知识点总结：</p>
 <h1 id="编写PHP扩展用到的工具："><a href="#编写PHP扩展用到的工具：" class="headerlink" title="编写PHP扩展用到的工具："></a>编写PHP扩展用到的工具：</h1><p>ext_skel 根据proto／xml等描述文件生成扩展代码框架</p>
@@ -267,7 +266,6 @@
 </tr>
 </tbody>
 </table>
-<a id="more"></a>
 <h1 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h1><p>堆内存分配和标准c类似，只不过e***alloc()<br>函数如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">emalloc(<span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">efree(<span class="keyword">void</span> *ptr);</div><div class="line"> </div><div class="line">ecalloc(<span class="keyword">size_t</span> nmemb, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">erealloc(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size);</div><div class="line"> </div><div class="line">estrdup(<span class="keyword">const</span> <span class="keyword">char</span> *s);</div><div class="line"> </div><div class="line">estrndup(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">unsigned</span> <span class="keyword">int</span> length);</div></pre></td></tr></table></figure>
 <h1 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h1><p>变量：return_value<br>宏：RETURN_type(), RETVAL_type()</p>
@@ -417,66 +415,7 @@
     <summary type="html">
     
       &lt;p&gt;开发PHP扩展基本的知识点总结：&lt;/p&gt;
-&lt;h1 id=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;a href=&quot;#编写PHP扩展用到的工具：&quot; class=&quot;headerlink&quot; title=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;/a&gt;编写PHP扩展用到的工具：&lt;/h1&gt;&lt;p&gt;ext_skel 根据proto／xml等描述文件生成扩展代码框架&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#ext_skel --proto=file --extname=xyz&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;phpize 生成php扩展congifure&lt;/p&gt;
-&lt;h1 id=&quot;获取参数&quot;&gt;&lt;a href=&quot;#获取参数&quot; class=&quot;headerlink&quot; title=&quot;获取参数&quot;&gt;&lt;/a&gt;获取参数&lt;/h1&gt;&lt;p&gt;参数类型对应表&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;类型指定符&lt;/th&gt;
-&lt;th&gt;对应的C类型&lt;/th&gt;
-&lt;th&gt;描述&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;   l&lt;/td&gt;
-&lt;td&gt;long&lt;/td&gt;
-&lt;td&gt;符号整数&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   d&lt;/td&gt;
-&lt;td&gt;double&lt;/td&gt;
-&lt;td&gt;浮点数&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   s&lt;/td&gt;
-&lt;td&gt;char *, int&lt;/td&gt;
-&lt;td&gt;二进制字符串，长度&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   b&lt;/td&gt;
-&lt;td&gt;zend_bool&lt;/td&gt;
-&lt;td&gt;逻辑型（1或0）&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   r&lt;/td&gt;
-&lt;td&gt;zval *&lt;/td&gt;
-&lt;td&gt;资源（文件指针，数据库连接等）&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   a&lt;/td&gt;
-&lt;td&gt;zval *&lt;/td&gt;
-&lt;td&gt;联合数组&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   o&lt;/td&gt;
-&lt;td&gt;zval *&lt;/td&gt;
-&lt;td&gt;任何类型的对象&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   O&lt;/td&gt;
-&lt;td&gt;zval *&lt;/td&gt;
-&lt;td&gt;指定类型的对象。需要提供目标对象的类类型&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;   z&lt;/td&gt;
-&lt;td&gt;zval *&lt;/td&gt;
-&lt;td&gt;无任何操作的zval&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;h1 id=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;a href=&quot;#编写PHP扩展用到的工具：&quot; class=&quot;headerlink&quot; title=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;/a&gt;编写PHP扩展用到的工具：&lt;/h1&gt;&lt;p&gt;ex
     
     </summary>
     
