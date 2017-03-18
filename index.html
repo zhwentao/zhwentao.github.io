@@ -180,11 +180,11 @@
 <h1 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h1><p>kmp算法以及其变体算法，一次只能匹配一个模式，要匹配多个模式，就需要循环多次。DFA匹配算法可以同时进行多个模式匹配，在需要多模式匹配的场景下，能够提高匹配性能。经典的多模式匹配算法是Aho-Corasick算法。原理上是把trie树增加失败调转，转变为DFA状态机，然后匹配的时候在dfa内查询，判断是否到达匹配状态。<br>构建步骤：</p>
 <ol>
 <li>根据多模式构建前缀树；</li>
-<li>为前缀树增加跳转，扩展为DFA;<br>trie树扩展为DFA，如果节点字符没有root的边<blockquote>
+<li>为前缀树增加跳转，扩展为DFA;<blockquote>
 <p>Go to :<br>We build Trie. And for all characters which don’t have an edge at root, we add an edge back to root.<br>Failure :<br>For a state s, we find the longest proper suffix which is a proper prefix of some pattern. This is done using Breadth First Traversal of Trie.</p>
 </blockquote>
 </li>
-<li>匹配输出.<br>匹配输出<blockquote>
+<li>匹配输出.<blockquote>
 <p>Output :<br>For a state s, indexes of all words ending at s are stored. These indexes are stored as bitwise map (by doing bitwise OR of values). This is also computing using Breadth First Traversal with Failure.</p>
 </blockquote>
 </li>
