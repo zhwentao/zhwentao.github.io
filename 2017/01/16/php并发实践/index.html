@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="php并发实践"/>
+  <meta name="description" content="PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？"/>
 
 
 
@@ -33,19 +33,16 @@
 <link rel="canonical" href="https://zhwentao.github.io/2017/01/16/php并发实践/"/>
 
 
-<meta name="description" content="问题场景PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？
-解决方案curl_multi并发请求http服务代码实例：123456789101112131415161718192021222324252627282930313233343536373839$ch1 = cu">
+<meta name="description" content="PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="php并发实践">
 <meta property="og:url" content="https://zhwentao.github.io/2017/01/16/php并发实践/index.html">
 <meta property="og:site_name" content="T">
-<meta property="og:description" content="问题场景PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？
-解决方案curl_multi并发请求http服务代码实例：123456789101112131415161718192021222324252627282930313233343536373839$ch1 = cu">
-<meta property="og:updated_time" content="2017-03-05T07:57:10.000Z">
+<meta property="og:description" content="PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？">
+<meta property="og:updated_time" content="2017-03-19T15:09:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php并发实践">
-<meta name="twitter:description" content="问题场景PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？
-解决方案curl_multi并发请求http服务代码实例：123456789101112131415161718192021222324252627282930313233343536373839$ch1 = cu">
+<meta name="twitter:description" content="PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />

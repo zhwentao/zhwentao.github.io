@@ -11,12 +11,12 @@
 
 
 
-  <meta name="description" content="msgpack-c调试历程--demo要看仔细"/>
+  <meta name="description" content="注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。"/>
 
 
 
 
-  <meta name="keywords" content="C," />
+  <meta name="keywords" content="c," />
 
 
 
@@ -33,16 +33,16 @@
 <link rel="canonical" href="https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/"/>
 
 
-<meta name="description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
+<meta name="description" content="注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="msgpack-c调试历程--demo要看仔细">
 <meta property="og:url" content="https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/index.html">
 <meta property="og:site_name" content="T">
-<meta property="og:description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
-<meta property="og:updated_time" content="2017-03-14T15:18:25.000Z">
+<meta property="og:description" content="注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。">
+<meta property="og:updated_time" content="2017-03-19T15:07:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="msgpack-c调试历程--demo要看仔细">
-<meta name="twitter:description" content="先贴demo代码：123456789101112131415161718192021222324252627282930313233343536#include &amp;lt;msgpack.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;int main(void)&amp;#123;    /* msgpack::sbuffer is a simple buffer implementation.">
+<meta name="twitter:description" content="注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -184,7 +184,7 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/C/">C</a>
+            <a href="/tags/c/">c</a>
           
         </div>
 

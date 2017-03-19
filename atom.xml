@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-03-18T14:37:06.000Z</updated>
+  <updated>2017-03-19T15:11:43.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://zhwentao.github.io/2017/03/18/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
     <id>https://zhwentao.github.io/2017/03/18/模式匹配算法学习/</id>
     <published>2017-03-18T14:12:41.000Z</published>
-    <updated>2017-03-18T14:37:06.000Z</updated>
+    <updated>2017-03-19T15:11:43.000Z</updated>
     
     <content type="html"><![CDATA[<p>项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。</p>
 <h1 id="朴素匹配"><a href="#朴素匹配" class="headerlink" title="朴素匹配"></a>朴素匹配</h1><p>朴素匹配算法，每次比配失败，匹配起始点变为上一次起始点+1，然后从模式串开头开始匹配，如此循环，直到匹配到，或者文本长度-匹配起始点 &lt; 模式长度。<br>核心代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s[N], p[M];</div><div class="line"><span class="keyword">int</span> i = j = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> (N - i &gt;= M &amp;&amp; j &lt; M) &#123;</div><div class="line">    <span class="keyword">if</span> (p[j] == s[j+i]) &#123;</div><div class="line">        j++;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    j = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="keyword">if</span> (j == M) &#123;&#125;</div></pre></td></tr></table></figure></p>
@@ -50,8 +50,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。&lt;/p&gt;
-&lt;h1 id=&quot;朴素匹配&quot;&gt;&lt;a href=&quot;#朴素匹配&quot; class=&quot;header
+      项目里有时候需要做多模式匹配，如果匹配的模式比较多的话，用php的str_replace在性能上就有些尴尬了。在这个背景下，趁着年后工作上比较轻松一点，研究了常见的模式匹配算法。
     
     </summary>
     
@@ -67,7 +66,7 @@
     <link href="https://zhwentao.github.io/2017/03/14/msgpack-c%E8%B0%83%E8%AF%95%E5%8E%86%E7%A8%8B/"/>
     <id>https://zhwentao.github.io/2017/03/14/msgpack-c调试历程/</id>
     <published>2017-03-14T15:18:25.000Z</published>
-    <updated>2017-03-14T15:18:25.000Z</updated>
+    <updated>2017-03-19T15:07:55.000Z</updated>
     
     <content type="html"><![CDATA[<p>先贴demo代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;msgpack.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/* msgpack::sbuffer is a simple buffer implementation. */</span></div><div class="line">    msgpack_sbuffer sbuf;</div><div class="line">    msgpack_sbuffer_init(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="comment">/* serialize values into the buffer using msgpack_sbuffer_write callback function. */</span></div><div class="line">    msgpack_packer pk;</div><div class="line">    msgpack_packer_init(&amp;pk, &amp;sbuf, msgpack_sbuffer_write);</div><div class="line"></div><div class="line">    msgpack_pack_array(&amp;pk, <span class="number">3</span>);</div><div class="line">    msgpack_pack_int(&amp;pk, <span class="number">1</span>);</div><div class="line">    msgpack_pack_true(&amp;pk);</div><div class="line">    msgpack_pack_str(&amp;pk, <span class="number">7</span>);</div><div class="line">    msgpack_pack_str_body(&amp;pk, <span class="string">"example"</span>, <span class="number">7</span>);</div><div class="line"></div><div class="line">    <span class="comment">/* deserialize the buffer into msgpack_object instance. */</span></div><div class="line">    <span class="comment">/* deserialized object is valid during the msgpack_zone instance alive. */</span></div><div class="line">    msgpack_zone mempool;</div><div class="line">    msgpack_zone_init(&amp;mempool, <span class="number">2048</span>);</div><div class="line"></div><div class="line">    msgpack_object deserialized;</div><div class="line">    msgpack_unpack(sbuf.data, sbuf.size, <span class="literal">NULL</span>, &amp;mempool, &amp;deserialized);</div><div class="line"></div><div class="line">    <span class="comment">/* print the deserialized object. */</span></div><div class="line">    msgpack_object_print(<span class="built_in">stdout</span>, deserialized);</div><div class="line">    <span class="built_in">puts</span>(<span class="string">""</span>);</div><div class="line"></div><div class="line">    msgpack_zone_destroy(&amp;mempool);</div><div class="line">    msgpack_sbuffer_destroy(&amp;sbuf);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。</p>
@@ -75,12 +74,12 @@
     
     <summary type="html">
     
-      &lt;p&gt;先贴demo代码：&lt;br&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=
+      注意代码中msgpack_zone的注释，查看msgpack_object结构体，内部的数据部分指针指向zone的地址，所以只有在zone生命周期内，object才是有效的。
     
     </summary>
     
     
-      <category term="C" scheme="https://zhwentao.github.io/tags/C/"/>
+      <category term="c" scheme="https://zhwentao.github.io/tags/c/"/>
     
   </entry>
   
@@ -89,7 +88,7 @@
     <link href="https://zhwentao.github.io/2017/02/27/php%E6%89%A9%E5%B1%95-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/"/>
     <id>https://zhwentao.github.io/2017/02/27/php扩展-调试工具/</id>
     <published>2017-02-26T16:24:21.000Z</published>
-    <updated>2017-02-26T16:34:52.000Z</updated>
+    <updated>2017-03-19T15:09:56.000Z</updated>
     
     <content type="html"><![CDATA[<p>在linux 环境下开发php扩展，需要用到linux下的调试工具，如gdb，strace，valgrind等。另外，一些情况下，在php产生core是，需要调试core文件。下面记录一下常用工具的用途和一些帮助资源。</p>
 <h1 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h1><p>为了gdb可以显示更多调试信息，需要在开启php编译选项–enable-debug。具体的调试技巧可参考<a href="http://blog.jobbole.com/107759/" target="_blank" rel="external">gdb调试入门-中文</a> <a href="http://www.brendangregg.com/blog/2016-08-09/gdb-example-ncurses.html" target="_blank" rel="external">英文</a></p>
@@ -99,8 +98,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;在linux 环境下开发php扩展，需要用到linux下的调试工具，如gdb，strace，valgrind等。另外，一些情况下，在php产生core是，需要调试core文件。下面记录一下常用工具的用途和一些帮助资源。&lt;/p&gt;
-&lt;h1 id=&quot;gdb&quot;&gt;&lt;a href=&quot;#
+      在linux 环境下开发php扩展，需要用到linux下的调试工具，如gdb，strace，valgrind等。另外，一些情况下，在php产生core是，需要调试core文件。下面记录一下常用工具的用途和一些帮助资源。
     
     </summary>
     
@@ -116,7 +114,7 @@
     <link href="https://zhwentao.github.io/2017/02/11/%E5%85%B3%E4%BA%8E%E6%8A%80%E6%9C%AF%E7%AD%94%E8%BE%A9%E5%88%86%E4%BA%AB%E8%AE%B0%E5%BD%95/"/>
     <id>https://zhwentao.github.io/2017/02/11/关于技术答辩分享记录/</id>
     <published>2017-02-10T16:02:03.000Z</published>
-    <updated>2017-02-10T16:39:19.000Z</updated>
+    <updated>2017-03-19T15:11:18.000Z</updated>
     
     <content type="html"><![CDATA[<p>虽然没有报名晋升答辩，当然也没有被通知报名答辩，但是还是记录一下别人家的经验吧。<br>总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。</p>
 <p>技术晋升答辩当然必须是技术驱动，突出技术上的亮点。可以对业务抽象后产出通用组件，优化开发流程提高工作效率的工具或者系统，新技术结合业务特点的消化应用，等等方面。</p>
@@ -127,8 +125,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;虽然没有报名晋升答辩，当然也没有被通知报名答辩，但是还是记录一下别人家的经验吧。&lt;br&gt;总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。&lt;/p&gt;
-&lt;p&gt;技术晋升答辩当然必须是技术驱动，突出技术上的亮点。可以对业务抽象后产出通用组件，优化开发流程提高工作效率的工具
+      总结一下几个关键词：技术驱动，成果量化，功在平时，注重气场。
     
     </summary>
     
@@ -142,7 +139,7 @@
     <link href="https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504%E5%8C%BA%E5%88%AB/"/>
     <id>https://zhwentao.github.io/2017/01/22/nginx-http-502-503-504区别/</id>
     <published>2017-01-22T15:43:32.000Z</published>
-    <updated>2017-02-28T14:59:15.000Z</updated>
+    <updated>2017-03-19T15:08:30.000Z</updated>
     
     <content type="html"><![CDATA[<p>做web开发，常常回遇到5XX的状态码，区别记录下来：</p>
 <ul>
@@ -156,11 +153,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;做web开发，常常回遇到5XX的状态码，区别记录下来：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;504：Gateway Timeout 网关超时，如php-fpm运行超时&lt;/li&gt;
-&lt;li&gt;502：Bad Gateway 网关错误，如无空闲的php-fpm进程&lt;/li&gt;
-&lt;li&gt;503：
+      做web开发，常常回遇到5XX的状态码，区别记录下来：
     
     </summary>
     
@@ -174,7 +167,7 @@
     <link href="https://zhwentao.github.io/2017/01/21/%E7%8C%B4%E5%B9%B4%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/21/猴年总结/</id>
     <published>2017-01-21T14:50:36.000Z</published>
-    <updated>2017-01-22T15:22:02.000Z</updated>
+    <updated>2017-03-19T15:12:24.000Z</updated>
     
     <content type="html"><![CDATA[<p>转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。</p>
 <p>工作上，从老东家毕业，换了新的环境，有更多的时间折腾些自己感兴趣的事，还不错。</p>
@@ -189,12 +182,12 @@
     
     <summary type="html">
     
-      &lt;p&gt;转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。&lt;/p&gt;
-&lt;p&gt;工作上，从老东家毕业，换了新的环境，有更多的时间折腾些自己感兴趣的事，还不错。&lt;/p&gt;
-&lt;p&gt;技能上，买的书看了大半吧，温习了java相关的东西，hadoop相关的一些东西。go，swift这些热门的语
+      转眼到猴尾巴了，总结一下今年的工作生活，为来年做个参照。
     
     </summary>
     
+    
+      <category term="计划" scheme="https://zhwentao.github.io/tags/%E8%AE%A1%E5%88%92/"/>
     
   </entry>
   
@@ -203,7 +196,7 @@
     <link href="https://zhwentao.github.io/2017/01/17/php%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"/>
     <id>https://zhwentao.github.io/2017/01/17/php扩展知识点总结/</id>
     <published>2017-01-17T14:43:28.000Z</published>
-    <updated>2017-03-18T14:37:31.000Z</updated>
+    <updated>2017-03-19T15:07:08.000Z</updated>
     
     <content type="html"><![CDATA[<p>开发PHP扩展基本的知识点总结：</p>
 <h1 id="编写PHP扩展用到的工具："><a href="#编写PHP扩展用到的工具：" class="headerlink" title="编写PHP扩展用到的工具："></a>编写PHP扩展用到的工具：</h1><p>ext_skel 根据proto／xml等描述文件生成扩展代码框架</p>
@@ -414,8 +407,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;开发PHP扩展基本的知识点总结：&lt;/p&gt;
-&lt;h1 id=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;a href=&quot;#编写PHP扩展用到的工具：&quot; class=&quot;headerlink&quot; title=&quot;编写PHP扩展用到的工具：&quot;&gt;&lt;/a&gt;编写PHP扩展用到的工具：&lt;/h1&gt;&lt;p&gt;ex
+      编写PHP扩展用到的工具，获取参数，内存分配，返回值，全局变量等等内容
     
     </summary>
     
@@ -433,7 +425,7 @@
     <link href="https://zhwentao.github.io/2017/01/16/php%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/"/>
     <id>https://zhwentao.github.io/2017/01/16/php并发实践/</id>
     <published>2017-01-16T14:29:49.000Z</published>
-    <updated>2017-03-05T07:57:10.000Z</updated>
+    <updated>2017-03-19T15:09:20.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><p>PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？</p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h4 id="curl-multi并发请求http服务"><a href="#curl-multi并发请求http服务" class="headerlink" title="curl_multi并发请求http服务"></a>curl_multi并发请求http服务</h4><p>代码实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">$ch1 = curl_init();</div><div class="line">$ch2 = curl_init();</div><div class="line"></div><div class="line">// 设置URL和相应的选项</div><div class="line">curl_setopt($ch1, CURLOPT_URL, &quot;http://lxr.php.net/&quot;);</div><div class="line">curl_setopt($ch1, CURLOPT_HEADER, 0);</div><div class="line">curl_setopt($ch2, CURLOPT_URL, &quot;http://www.php.net/&quot;);</div><div class="line">curl_setopt($ch2, CURLOPT_HEADER, 0);</div><div class="line"></div><div class="line">// 创建批处理cURL句柄</div><div class="line">$mh = curl_multi_init();</div><div class="line"></div><div class="line">// 增加2个句柄</div><div class="line">curl_multi_add_handle($mh,$ch1);</div><div class="line">curl_multi_add_handle($mh,$ch2);</div><div class="line"></div><div class="line">$active = null;</div><div class="line">// 执行批处理句柄</div><div class="line">do &#123;</div><div class="line">    $mrc = curl_multi_exec($mh, $active);</div><div class="line">&#125; while ($mrc == CURLM_CALL_MULTI_PERFORM);</div><div class="line"></div><div class="line">while ($active &amp;&amp; $mrc == CURLM_OK) &#123;</div><div class="line">    //处理select返回-1时cpu 100% 的bug</div><div class="line">    //https://curl.haxx.se/libcurl/c/curl_multi_fdset.html</div><div class="line">    //https://bugs.php.net/bug.php?id=63411</div><div class="line">    $cm = curl_multi_select($mh);</div><div class="line">    if ($cm === -1) &#123;</div><div class="line">        usleep(10000);//10ms</div><div class="line">    &#125; </div><div class="line">    do &#123;</div><div class="line">        $mrc = curl_multi_exec($mh, $active);</div><div class="line">    &#125; while ($mrc == CURLM_CALL_MULTI_PERFORM);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 关闭全部句柄</div><div class="line">curl_multi_remove_handle($mh, $ch1);</div><div class="line">curl_multi_remove_handle($mh, $ch2);</div><div class="line">curl_multi_close($mh);</div></pre></td></tr></table></figure></p>
@@ -446,7 +438,7 @@
     
     <summary type="html">
     
-      &lt;h1 id=&quot;问题场景&quot;&gt;&lt;a href=&quot;#问题场景&quot; class=&quot;headerlink&quot; title=&quot;问题场景&quot;&gt;&lt;/a&gt;问题场景&lt;/h1&gt;&lt;p&gt;PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有
+      PHP做接口业务，经常会遇到请求多个后端服务。如果是步阻塞请求，php接口的响应时间依赖于所有后台服务的响应时间之和。那么有什么方法可以优化服务调用，提高php接口响应时间呢？
     
     </summary>
     
@@ -460,7 +452,7 @@
     <link href="https://zhwentao.github.io/2017/01/16/ssh%E9%85%8D%E7%BD%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <id>https://zhwentao.github.io/2017/01/16/ssh配置注意事项/</id>
     <published>2017-01-16T14:28:43.000Z</published>
-    <updated>2017-01-16T14:43:50.000Z</updated>
+    <updated>2017-03-19T15:10:48.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="ssh连接常见问题："><a href="#ssh连接常见问题：" class="headerlink" title="ssh连接常见问题："></a>ssh连接常见问题：</h4><ul>
 <li>秘钥路径配置不对</li>
@@ -470,12 +462,12 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;ssh连接常见问题：&quot;&gt;&lt;a href=&quot;#ssh连接常见问题：&quot; class=&quot;headerlink&quot; title=&quot;ssh连接常见问题：&quot;&gt;&lt;/a&gt;ssh连接常见问题：&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;秘钥路径配置不对&lt;/li&gt;
-&lt;li&gt;服务端authorized_
+      ssh连接常见问题
     
     </summary>
     
+    
+      <category term="配置" scheme="https://zhwentao.github.io/tags/%E9%85%8D%E7%BD%AE/"/>
     
   </entry>
   
