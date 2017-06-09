@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2017-06-09T01:52:30.000Z</updated>
+  <updated>2017-06-09T01:53:45.000Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://zhwentao.github.io/2017/06/08/mysql-%E8%BF%90%E7%BB%B4%E5%B7%A5%E5%85%B7/"/>
     <id>https://zhwentao.github.io/2017/06/08/mysql-运维工具/</id>
     <published>2017-06-08T15:20:31.000Z</published>
-    <updated>2017-06-09T01:52:30.000Z</updated>
+    <updated>2017-06-09T01:53:45.000Z</updated>
     
     <content type="html"><![CDATA[<p>pt-online-schema-change<br>Percona-toolkit工具之一，可以不锁表修改表结构。</p>
 <h1 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h1><p>看工具名称就清楚了，在线修改表结构。mysql5.6之后增加了online ddl</p>
@@ -31,9 +31,9 @@
 <li>以一定块大小从原表拷贝数据到临时表，拷贝过程中通过原表上的触发器在原表进行的写操作都会更新到新建的临时表</li>
 <li>Rename 原表到old表中，在把临时表Rename为原表</li>
 <li>如果有参考该表的外键，根据alter-foreign-keys-method参数的值，检测外键相关的表，做相应设置的处理</li>
-<li>默认最后将旧原表删除<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><code>pt-online-schema-change --host=localhost --user=root D=dsp,t=ad --alter &quot;add column ad_id_from int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;广告offerID来源&#39;&quot; --charset=utf8 --execute</code></li>
+<li>默认最后将旧原表删除</li>
 </ol>
-<p>注意:<br>需要指定charset，否则中文注释可能被转换之后乱码。<br>设置默认值，否则插入不成功。</p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p><code>pt-online-schema-change --host=localhost --user=root D=dsp,t=ad --alter &quot;add column ad_id_from int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;广告offerID来源&#39;&quot; --charset=utf8 --execute</code><br>注意:<br>需要指定charset，否则中文注释可能被转换之后乱码。<br>设置默认值，否则插入不成功。</p>
 ]]></content>
     
     <summary type="html">

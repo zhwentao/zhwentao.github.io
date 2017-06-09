@@ -15,9 +15,9 @@
 <li>以一定块大小从原表拷贝数据到临时表，拷贝过程中通过原表上的触发器在原表进行的写操作都会更新到新建的临时表</li>
 <li>Rename 原表到old表中，在把临时表Rename为原表</li>
 <li>如果有参考该表的外键，根据alter-foreign-keys-method参数的值，检测外键相关的表，做相应设置的处理</li>
-<li>默认最后将旧原表删除<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><code>pt-online-schema-change --host=localhost --user=root D=dsp,t=ad --alter &quot;add column ad_id_from int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;广告offerID来源&#39;&quot; --charset=utf8 --execute</code></li>
+<li>默认最后将旧原表删除</li>
 </ol>
-<p>注意:<br>需要指定charset，否则中文注释可能被转换之后乱码。<br>设置默认值，否则插入不成功。</p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p><code>pt-online-schema-change --host=localhost --user=root D=dsp,t=ad --alter &quot;add column ad_id_from int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;广告offerID来源&#39;&quot; --charset=utf8 --execute</code><br>注意:<br>需要指定charset，否则中文注释可能被转换之后乱码。<br>设置默认值，否则插入不成功。</p>
 ]]></content>
       
         
