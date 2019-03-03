@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2019-03-03T15:58:24.079Z</updated>
+  <updated>2019-03-03T16:27:54.578Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/"/>
     <id>https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/</id>
     <published>2019-03-03T15:58:24.000Z</published>
-    <updated>2019-03-03T15:58:24.079Z</updated>
+    <updated>2019-03-03T16:27:54.578Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>This was originally based on tcmalloc, but has diverged quite a bit.<br><a href="http://goog-perftools.sourceforge.net/doc/tcmalloc.html" target="_blank" rel="external">http://goog-perftools.sourceforge.net/doc/tcmalloc.html</a></p>
@@ -58,7 +58,7 @@
     </summary>
     
     
-      <category term="golang weekly_work" scheme="https://zhwentao.github.io/tags/golang-weekly-work/"/>
+      <category term="golang, &quot;weekly work&quot;" scheme="https://zhwentao.github.io/tags/golang-weekly-work/"/>
     
   </entry>
   
