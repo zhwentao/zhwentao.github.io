@@ -177,14 +177,36 @@
     <div class="post-content">
       
         
-          
-        
 
         
-          golang 内存分配机制介绍
-          <div class="read-more">
-            <a href="/2019/03/03/golang-memory-alloctor/" class="read-more-link">阅读更多</a>
-          </div>
+          <blockquote>
+<p>This was originally based on tcmalloc, but has diverged quite a bit.<br><a href="http://goog-perftools.sourceforge.net/doc/tcmalloc.html" target="_blank" rel="external">http://goog-perftools.sourceforge.net/doc/tcmalloc.html</a></p>
+</blockquote>
+<h3 id="Allocator-data-structures"><a href="#Allocator-data-structures" class="headerlink" title="Allocator data structures"></a>Allocator data structures</h3><ol>
+<li>fixalloc: a free-list allocator for fixed-size off-heap objects,<br>used to manage storage used by the allocator.</li>
+<li>mheap: the malloc heap, managed at page (8192-byte) granularity.</li>
+<li>mspan: a run of pages managed by the mheap.</li>
+<li>mcentral: collects all spans of a given size class. Each MCentral is two lists of MSpans: those with free objects (c-&gt;nonempty) and those that are completely allocated (c-&gt;empty).</li>
+<li>mcache: a per-P cache of mspans with free space.</li>
+<li>mstats: allocation statistics.</li>
+</ol>
+<p>备注：缓存单元：page–&gt;mspan, 缓存池子：mcache–&gt;mcentral–&gt;mheap …-&gt; OS</p>
+<h3 id="小对象分配（-gt-32KB）分配过程"><a href="#小对象分配（-gt-32KB）分配过程" class="headerlink" title="小对象分配（&gt;= 32KB）分配过程"></a>小对象分配（&gt;= 32KB）分配过程</h3><p>缓存多层级分配过程, P线程的本地mcache(此时不需要lock, 后续场景有锁) -&gt; mcentral -&gt; mheap -&gt; OS (1MB起)</p>
+<blockquote>
+<p>// Allocating a small object proceeds up a hierarchy of caches:<br>//<br>//    1. Round the size up to one of the small size classes<br>//       and look in the corresponding mspan in this P’s mcache.<br>//       Scan the mspan’s free bitmap to find a free slot.<br>//       If there is a free slot, allocate it.<br>//       This can all be done without acquiring a lock.<br>//<br>//    2. If the mspan has no free slots, obtain a new mspan<br>//       from the mcentral’s list of mspans of the required size<br>//       class that have free space.<br>//       Obtaining a whole span amortizes the cost of locking<br>//       the mcentral.<br>//<br>//    3. If the mcentral’s mspan list is empty, obtain a run<br>//       of pages from the mheap to use for the mspan.<br>//<br>//    4. If the mheap is empty or has no page runs large enough,<br>//       allocate a new group of pages (at least 1MB) from the<br>//       operating system. Allocating a large run of pages<br>//       amortizes the cost of talking to the operating system.</p>
+</blockquote>
+<h3 id="释放过程"><a href="#释放过程" class="headerlink" title="释放过程"></a>释放过程</h3><p>类似于分配过程，释放也是一个多层级的处理过程</p>
+<blockquote>
+<p>// Sweeping an mspan and freeing objects on it proceeds up a similar<br>// hierarchy:<br>//<br>//    1. If the mspan is being swept in response to allocation, it<br>//       is returned to the mcache to satisfy the allocation.<br>//<br>//    2. Otherwise, if the mspan still has allocated objects in it,<br>//       it is placed on the mcentral free list for the mspan’s size<br>//       class.<br>//<br>//    3. Otherwise, if all objects in the mspan are free, the mspan<br>//       is now “idle”, so it is returned to the mheap and no longer<br>//       has a size class.<br>//       This may coalesce it with adjacent idle mspans.<br>//<br>//    4. If an mspan remains idle for long enough, return its pages<br>//       to the operating system.</p>
+</blockquote>
+<h3 id="大对象-gt-32KB-分配和释放"><a href="#大对象-gt-32KB-分配和释放" class="headerlink" title="大对象(&gt; 32KB)分配和释放"></a>大对象(&gt; 32KB)分配和释放</h3><blockquote>
+<p>// Allocating and freeing a large object uses the mheap<br>// directly, bypassing the mcache and mcentral.</p>
+</blockquote>
+<h3 id="Virtual-memory-layout"><a href="#Virtual-memory-layout" class="headerlink" title="Virtual memory layout"></a>Virtual memory layout</h3><blockquote>
+<p>// The heap consists of a set of arenas, which are 64MB on 64-bit and<br>// 4MB on 32-bit (heapArenaBytes). Each arena’s start address is also<br>// aligned to the arena size.</p>
+<p>// The arena map covers the entire possible address space, allowing<br>// the Go heap to use any part of the address space. The allocator<br>// attempts to keep arenas contiguous so that large spans (and hence<br>// large objects) can cross arenas.</p>
+</blockquote>
+
         
       
     </div>
@@ -216,10 +238,12 @@
         
 
         
-          golang 内存分配机制介绍
-          <div class="read-more">
-            <a href="/2018/01/08/PHP踩过的坑/" class="read-more-link">阅读更多</a>
-          </div>
+          <h3 id="0号坑："><a href="#0号坑：" class="headerlink" title="0号坑："></a>0号坑：</h3><p>in_array() 函数<br>掉坑的PHP版本：</p>
+<h3 id="1号坑："><a href="#1号坑：" class="headerlink" title="1号坑："></a>1号坑：</h3><p>empty() 函数<br>掉坑的PHP版本：</p>
+<h3 id="2号坑："><a href="#2号坑：" class="headerlink" title="2号坑："></a>2号坑：</h3><p>for和foreach遍历<br>掉坑的PHP版本：</p>
+<h3 id="3号坑："><a href="#3号坑：" class="headerlink" title="3号坑："></a>3号坑：</h3><p>json_decode 对象还是关联数组<br>掉坑的PHP版本：</p>
+<h3 id="4号坑："><a href="#4号坑：" class="headerlink" title="4号坑："></a>4号坑：</h3><p>require 还是include<br>掉坑的PHP版本：</p>
+
         
       
     </div>
@@ -251,10 +275,19 @@
         
 
         
-          golang 内存分配机制介绍
-          <div class="read-more">
-            <a href="/2017/06/08/mysql-运维工具/" class="read-more-link">阅读更多</a>
-          </div>
+          <p>pt-online-schema-change<br>Percona-toolkit工具之一，可以不锁表修改表结构。</p>
+<h1 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h1><p>看工具名称就清楚了，在线修改表结构。mysql5.6之后增加了online ddl</p>
+<h1 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h1><ol>
+<li>创建一个和要执行 alter 操作的表一样的新的空表结构(是alter之前的结构)</li>
+<li>在新表执行alter table 语句（速度应该很快）</li>
+<li>在原表中创建触发器3个触发器分别对应insert,update,delete操作</li>
+<li>以一定块大小从原表拷贝数据到临时表，拷贝过程中通过原表上的触发器在原表进行的写操作都会更新到新建的临时表</li>
+<li>Rename 原表到old表中，在把临时表Rename为原表</li>
+<li>如果有参考该表的外键，根据alter-foreign-keys-method参数的值，检测外键相关的表，做相应设置的处理</li>
+<li>默认最后将旧原表删除</li>
+</ol>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p><code>pt-online-schema-change --host=localhost --user=root D=dsp,t=ad --alter &quot;add column ad_id_from int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;广告offerID来源&#39;&quot; --charset=utf8 --execute</code><br>注意:<br>需要指定charset，否则中文注释可能被转换之后乱码。<br>设置默认值，否则插入不成功。</p>
+
         
       
     </div>

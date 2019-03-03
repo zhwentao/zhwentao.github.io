@@ -11,12 +11,12 @@
 
 
 
-  <meta name="description" content="golang 内存分配机制介绍"/>
+  <meta name="description" content="golang memory alloctor"/>
 
 
 
 
-  <meta name="keywords" content="golang, "weekly work"," />
+  <meta name="keywords" content="golang," />
 
 
 
@@ -33,16 +33,25 @@
 <link rel="canonical" href="https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/"/>
 
 
-<meta name="description" content="golang 内存分配机制介绍">
+<meta name="description" content="This was originally based on tcmalloc, but has diverged quite a bit.http://goog-perftools.sourceforge.net/doc/tcmalloc.html
+
+Allocator data structures
+fixalloc: a free-list allocator for fixed-size o">
 <meta property="og:type" content="article">
 <meta property="og:title" content="golang memory alloctor">
 <meta property="og:url" content="https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/index.html">
 <meta property="og:site_name" content="T">
-<meta property="og:description" content="golang 内存分配机制介绍">
-<meta property="og:updated_time" content="2019-03-03T16:27:54.578Z">
+<meta property="og:description" content="This was originally based on tcmalloc, but has diverged quite a bit.http://goog-perftools.sourceforge.net/doc/tcmalloc.html
+
+Allocator data structures
+fixalloc: a free-list allocator for fixed-size o">
+<meta property="og:updated_time" content="2019-03-03T16:36:06.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="golang memory alloctor">
-<meta name="twitter:description" content="golang 内存分配机制介绍">
+<meta name="twitter:description" content="This was originally based on tcmalloc, but has diverged quite a bit.http://goog-perftools.sourceforge.net/doc/tcmalloc.html
+
+Allocator data structures
+fixalloc: a free-list allocator for fixed-size o">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -224,7 +233,7 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/golang-weekly-work/">golang, "weekly work"</a>
+            <a href="/tags/golang/">golang</a>
           
         </div>
         
