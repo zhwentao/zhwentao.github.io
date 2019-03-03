@@ -4,6 +4,66 @@
   
     
     <entry>
+      <title><![CDATA[golang memory alloctor]]></title>
+      <url>https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>This was originally based on tcmalloc, but has diverged quite a bit.<br><a href="http://goog-perftools.sourceforge.net/doc/tcmalloc.html" target="_blank" rel="external">http://goog-perftools.sourceforge.net/doc/tcmalloc.html</a></p>
+</blockquote>
+<h3 id="Allocator-data-structures"><a href="#Allocator-data-structures" class="headerlink" title="Allocator data structures"></a>Allocator data structures</h3><ol>
+<li>fixalloc: a free-list allocator for fixed-size off-heap objects,<br>used to manage storage used by the allocator.</li>
+<li>mheap: the malloc heap, managed at page (8192-byte) granularity.</li>
+<li>mspan: a run of pages managed by the mheap.</li>
+<li>mcentral: collects all spans of a given size class. Each MCentral is two lists of MSpans: those with free objects (c-&gt;nonempty) and those that are completely allocated (c-&gt;empty).</li>
+<li>mcache: a per-P cache of mspans with free space.</li>
+<li>mstats: allocation statistics.</li>
+</ol>
+<p>备注：缓存单元：page–&gt;mspan, 缓存池子：mcache–&gt;mcentral–&gt;mheap …-&gt; OS</p>
+<h3 id="小对象分配（-gt-32KB）分配过程"><a href="#小对象分配（-gt-32KB）分配过程" class="headerlink" title="小对象分配（&gt;= 32KB）分配过程"></a>小对象分配（&gt;= 32KB）分配过程</h3><p>缓存多层级分配过程, P线程的本地mcache(此时不需要lock, 后续场景有锁) -&gt; mcentral -&gt; mheap -&gt; OS (1MB起)</p>
+<blockquote>
+<p>// Allocating a small object proceeds up a hierarchy of caches:<br>//<br>//    1. Round the size up to one of the small size classes<br>//       and look in the corresponding mspan in this P’s mcache.<br>//       Scan the mspan’s free bitmap to find a free slot.<br>//       If there is a free slot, allocate it.<br>//       This can all be done without acquiring a lock.<br>//<br>//    2. If the mspan has no free slots, obtain a new mspan<br>//       from the mcentral’s list of mspans of the required size<br>//       class that have free space.<br>//       Obtaining a whole span amortizes the cost of locking<br>//       the mcentral.<br>//<br>//    3. If the mcentral’s mspan list is empty, obtain a run<br>//       of pages from the mheap to use for the mspan.<br>//<br>//    4. If the mheap is empty or has no page runs large enough,<br>//       allocate a new group of pages (at least 1MB) from the<br>//       operating system. Allocating a large run of pages<br>//       amortizes the cost of talking to the operating system.</p>
+</blockquote>
+<h3 id="释放过程"><a href="#释放过程" class="headerlink" title="释放过程"></a>释放过程</h3><p>类似于分配过程，释放也是一个多层级的处理过程</p>
+<blockquote>
+<p>// Sweeping an mspan and freeing objects on it proceeds up a similar<br>// hierarchy:<br>//<br>//    1. If the mspan is being swept in response to allocation, it<br>//       is returned to the mcache to satisfy the allocation.<br>//<br>//    2. Otherwise, if the mspan still has allocated objects in it,<br>//       it is placed on the mcentral free list for the mspan’s size<br>//       class.<br>//<br>//    3. Otherwise, if all objects in the mspan are free, the mspan<br>//       is now “idle”, so it is returned to the mheap and no longer<br>//       has a size class.<br>//       This may coalesce it with adjacent idle mspans.<br>//<br>//    4. If an mspan remains idle for long enough, return its pages<br>//       to the operating system.</p>
+</blockquote>
+<h3 id="大对象-gt-32KB-分配和释放"><a href="#大对象-gt-32KB-分配和释放" class="headerlink" title="大对象(&gt; 32KB)分配和释放"></a>大对象(&gt; 32KB)分配和释放</h3><blockquote>
+<p>// Allocating and freeing a large object uses the mheap<br>// directly, bypassing the mcache and mcentral.</p>
+</blockquote>
+<h3 id="Virtual-memory-layout"><a href="#Virtual-memory-layout" class="headerlink" title="Virtual memory layout"></a>Virtual memory layout</h3><blockquote>
+<p>// The heap consists of a set of arenas, which are 64MB on 64-bit and<br>// 4MB on 32-bit (heapArenaBytes). Each arena’s start address is also<br>// aligned to the arena size.</p>
+<p>// The arena map covers the entire possible address space, allowing<br>// the Go heap to use any part of the address space. The allocator<br>// attempts to keep arenas contiguous so that large spans (and hence<br>// large objects) can cross arenas.</p>
+</blockquote>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> golang weekly_work </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[PHP踩过的坑]]></title>
+      <url>https://zhwentao.github.io/2018/01/08/PHP%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/</url>
+      <content type="html"><![CDATA[<h3 id="0号坑："><a href="#0号坑：" class="headerlink" title="0号坑："></a>0号坑：</h3><p>in_array() 函数<br>掉坑的PHP版本：</p>
+<h3 id="1号坑："><a href="#1号坑：" class="headerlink" title="1号坑："></a>1号坑：</h3><p>empty() 函数<br>掉坑的PHP版本：</p>
+<h3 id="2号坑："><a href="#2号坑：" class="headerlink" title="2号坑："></a>2号坑：</h3><p>for和foreach遍历<br>掉坑的PHP版本：</p>
+<h3 id="3号坑："><a href="#3号坑：" class="headerlink" title="3号坑："></a>3号坑：</h3><p>json_decode 对象还是关联数组<br>掉坑的PHP版本：</p>
+<h3 id="4号坑："><a href="#4号坑：" class="headerlink" title="4号坑："></a>4号坑：</h3><p>require 还是include<br>掉坑的PHP版本：</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> PHP </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[mysql 运维工具]]></title>
       <url>https://zhwentao.github.io/2017/06/08/mysql-%E8%BF%90%E7%BB%B4%E5%B7%A5%E5%85%B7/</url>
       <content type="html"><![CDATA[<p>pt-online-schema-change<br>Percona-toolkit工具之一，可以不锁表修改表结构。</p>
@@ -97,9 +157,9 @@
         
         <tags>
             
-            <tag> c </tag>
-            
             <tag> PHP扩展 </tag>
+            
+            <tag> c </tag>
             
         </tags>
         
@@ -382,11 +442,11 @@
         
         <tags>
             
-            <tag> c </tag>
-            
             <tag> PHP </tag>
             
             <tag> PHP扩展 </tag>
+            
+            <tag> c </tag>
             
         </tags>
         

@@ -11,8 +11,12 @@
 
 
 
+  <meta name="description" content="PHP踩过的坑"/>
 
 
+
+
+  <meta name="keywords" content="PHP," />
 
 
 
@@ -26,15 +30,31 @@
 
 
 
-<link rel="canonical" href="https://zhwentao.github.io/archives/2017/06/"/>
+<link rel="canonical" href="https://zhwentao.github.io/2018/01/08/PHP踩过的坑/"/>
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="T">
-<meta property="og:url" content="https://zhwentao.github.io/archives/2017/06/index.html">
+<meta name="description" content="0号坑：in_array() 函数掉坑的PHP版本：
+1号坑：empty() 函数掉坑的PHP版本：
+2号坑：for和foreach遍历掉坑的PHP版本：
+3号坑：json_decode 对象还是关联数组掉坑的PHP版本：
+4号坑：require 还是include掉坑的PHP版本：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP踩过的坑">
+<meta property="og:url" content="https://zhwentao.github.io/2018/01/08/PHP踩过的坑/index.html">
 <meta property="og:site_name" content="T">
+<meta property="og:description" content="0号坑：in_array() 函数掉坑的PHP版本：
+1号坑：empty() 函数掉坑的PHP版本：
+2号坑：for和foreach遍历掉坑的PHP版本：
+3号坑：json_decode 对象还是关联数组掉坑的PHP版本：
+4号坑：require 还是include掉坑的PHP版本：">
+<meta property="og:updated_time" content="2018-01-08T04:09:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="T">
+<meta name="twitter:title" content="PHP踩过的坑">
+<meta name="twitter:description" content="0号坑：in_array() 函数掉坑的PHP版本：
+1号坑：empty() 函数掉坑的PHP版本：
+2号坑：for和foreach遍历掉坑的PHP版本：
+3号坑：json_decode 对象还是关联数组掉坑的PHP版本：
+4号坑：require 还是include掉坑的PHP版本：">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -58,11 +78,7 @@
 
 
 
-    <title>
-  
-    归档 · T
-  
-</title>
+    <title> PHP踩过的坑 · T </title>
   </head>
 
   <body>
@@ -159,56 +175,78 @@
           <div id="content" class="content">
             
   
-  <section id="archive" class="archive">
-    
-      
-        <div class="archive-title">
-          <h2 class="archive-name"> All </h2>
-          <span class="archive-post-counter">
-            目前共计 12 篇日志
-          </span>
-        </div>
-      
-    
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          PHP踩过的坑
+        
+      </h1>
 
-    
-      
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year">2017</h2>
-          </div>
-        
-      
-      
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            06-08
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2017/06/08/mysql-运维工具/" class="archive-post-link">
-            mysql 运维工具
-          </a>
+      <div class="post-meta">
+        <span class="post-time">
+          2018年1月8日
         </span>
       </div>
-    
-  </section>
+    </header>
 
-  
-  <nav class="pagination">
     
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">文章目录</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0号坑："><span class="toc-text">0号坑：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1号坑："><span class="toc-text">1号坑：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2号坑："><span class="toc-text">2号坑：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3号坑："><span class="toc-text">3号坑：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4号坑："><span class="toc-text">4号坑：</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <h3 id="0号坑："><a href="#0号坑：" class="headerlink" title="0号坑："></a>0号坑：</h3><p>in_array() 函数<br>掉坑的PHP版本：</p>
+<h3 id="1号坑："><a href="#1号坑：" class="headerlink" title="1号坑："></a>1号坑：</h3><p>empty() 函数<br>掉坑的PHP版本：</p>
+<h3 id="2号坑："><a href="#2号坑：" class="headerlink" title="2号坑："></a>2号坑：</h3><p>for和foreach遍历<br>掉坑的PHP版本：</p>
+<h3 id="3号坑："><a href="#3号坑：" class="headerlink" title="3号坑："></a>3号坑：</h3><p>json_decode 对象还是关联数组<br>掉坑的PHP版本：</p>
+<h3 id="4号坑："><a href="#4号坑：" class="headerlink" title="4号坑："></a>4号坑：</h3><p>require 还是include<br>掉坑的PHP版本：</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/">PHP</a>
+          
+        </div>
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019/03/03/golang-memory-alloctor/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">golang memory alloctor</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/06/08/mysql-运维工具/">
+        <span class="next-text nav-default">mysql 运维工具</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
     
   </nav>
 
+      </footer>
+    
+  </article>
 
 
           </div>
           
+  <div class="comments" id="comments">
+    
+  </div>
+
         </div>  
       </main>
 
