@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhwentao.github.io/"/>
-  <updated>2019-03-03T16:36:06.681Z</updated>
+  <updated>2019-03-03T16:38:26.856Z</updated>
   <id>https://zhwentao.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/"/>
     <id>https://zhwentao.github.io/2019/03/03/golang-memory-alloctor/</id>
     <published>2019-03-03T15:58:24.000Z</published>
-    <updated>2019-03-03T16:36:06.681Z</updated>
+    <updated>2019-03-03T16:38:26.856Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>This was originally based on tcmalloc, but has diverged quite a bit.<br><a href="http://goog-perftools.sourceforge.net/doc/tcmalloc.html" target="_blank" rel="external">http://goog-perftools.sourceforge.net/doc/tcmalloc.html</a></p>
@@ -34,7 +34,7 @@
 <li>mstats: allocation statistics.</li>
 </ol>
 <p>备注：缓存单元：page–&gt;mspan, 缓存池子：mcache–&gt;mcentral–&gt;mheap …-&gt; OS</p>
-<h3 id="小对象分配（-gt-32KB）分配过程"><a href="#小对象分配（-gt-32KB）分配过程" class="headerlink" title="小对象分配（&gt;= 32KB）分配过程"></a>小对象分配（&gt;= 32KB）分配过程</h3><p>缓存多层级分配过程, P线程的本地mcache(此时不需要lock, 后续场景有锁) -&gt; mcentral -&gt; mheap -&gt; OS (1MB起)</p>
+<h3 id="小对象分配（-lt-32KB）分配过程"><a href="#小对象分配（-lt-32KB）分配过程" class="headerlink" title="小对象分配（\&lt;= 32KB）分配过程"></a>小对象分配（\&lt;= 32KB）分配过程</h3><p>缓存多层级分配过程, P线程的本地mcache(此时不需要lock, 后续场景有锁) -&gt; mcentral -&gt; mheap -&gt; OS (1MB起)</p>
 <blockquote>
 <p>// Allocating a small object proceeds up a hierarchy of caches:<br>//<br>//    1. Round the size up to one of the small size classes<br>//       and look in the corresponding mspan in this P’s mcache.<br>//       Scan the mspan’s free bitmap to find a free slot.<br>//       If there is a free slot, allocate it.<br>//       This can all be done without acquiring a lock.<br>//<br>//    2. If the mspan has no free slots, obtain a new mspan<br>//       from the mcentral’s list of mspans of the required size<br>//       class that have free space.<br>//       Obtaining a whole span amortizes the cost of locking<br>//       the mcentral.<br>//<br>//    3. If the mcentral’s mspan list is empty, obtain a run<br>//       of pages from the mheap to use for the mspan.<br>//<br>//    4. If the mheap is empty or has no page runs large enough,<br>//       allocate a new group of pages (at least 1MB) from the<br>//       operating system. Allocating a large run of pages<br>//       amortizes the cost of talking to the operating system.</p>
 </blockquote>
